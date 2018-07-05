@@ -1,11 +1,22 @@
 package com.autoapi.model;
 
+import java.util.Map;
+
 public class UrlModel {
     private String schema = "";
     private String host = "";
     private String port = "";
     private String version = "";
     private String path = "";
+    private Map params;
+
+    public Map getParams() {
+        return params;
+    }
+
+    public void setParams(Map params) {
+        this.params = params;
+    }
 
     public String getSchema() {
         return schema;
@@ -45,5 +56,17 @@ public class UrlModel {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return "UrlModel{" +
+                "schema='" + schema + '\'' +
+                ", host='" + host + '\'' +
+                ", port='" + port + '\'' +
+                ", version='" + version + '\'' +
+                ", path='" + path + '\'' +
+                ", params=" + params +
+                '}';
     }
 }

@@ -1,16 +1,17 @@
 package com.autoapi.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class FixtureModel {
-    private List<ApiModel> apis;
+    private Map<String,ApiModel> apis;
     private List<SqlModel> sql;
 
-    public List<ApiModel> getApis() {
+    public Map<String, ApiModel> getApis() {
         return apis;
     }
 
-    public void setApis(List<ApiModel> apis) {
+    public void setApis(Map<String, ApiModel> apis) {
         this.apis = apis;
     }
 
@@ -20,5 +21,13 @@ public class FixtureModel {
 
     public void setSql(List<SqlModel> sql) {
         this.sql = sql;
+    }
+
+    @Override
+    public String toString() {
+        return "FixtureModel{" +
+                "apis=" + apis +
+                ", sql=" + sql +
+                '}';
     }
 }

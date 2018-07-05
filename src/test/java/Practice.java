@@ -1,8 +1,10 @@
 import com.autoapi.parse.ParseBase;
+import com.autoapi.parse.ParseDirecotory;
 import com.autoapi.util.YamlUtil;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Practice {
@@ -17,7 +19,16 @@ public class Practice {
 
     @Test
     public void prac2() throws Exception {
-        ParseBase parseBase = new ParseBase("/Users/chiyang/IdeaProjects/apiautomation/src/main/resources/projectA/api.yaml");
-        parseBase.getApis();
+        ParseBase parseBase = new ParseBase(
+                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projectA\\api.yaml");
+        System.out.println(parseBase.getApis());
+    }
+
+    @Test
+    public void prac3() {
+        Map m = new HashMap();
+        m.put("a",null);
+        m.put("b",null);
+        System.out.println(m);
     }
 }

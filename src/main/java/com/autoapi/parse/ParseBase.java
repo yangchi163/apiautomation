@@ -36,7 +36,9 @@ public class ParseBase {
         apis = new HashMap();
         //模块层
         for (Object moduleKey : api.keySet()){
-            apis.put(moduleKey,new HashMap());
+            //apis.put(moduleKey,new HashMap());
+            //用来存放模块下所有api信息
+            Map apisDetail = new HashMap();
             //得到一组api
             Map apiDetails = (Map) api.get(moduleKey);
             //api层
@@ -45,13 +47,13 @@ public class ParseBase {
                 Map apiDetail = (Map) apiDetails.get(apiKey);
                 //组装request
                 RequestModel requestModel = new RequestModel();
-                //处理path
+                //处理path，一定要有
                 try {
                     UrlModel urlModel = new UrlModel();
-                    urlModel.setSchema(baseModel.urlModel.getSchema());
-                    urlModel.setHost(baseModel.urlModel.getHost());
-                    urlModel.setPort(baseModel.urlModel.getPort());
-                    urlModel.setVersion(baseModel.urlModel.getVersion());
+                    urlModel.setSchema(baseModel.getUrlModel().getSchema());
+                    urlModel.setHost(baseModel.getUrlModel().getHost());
+                    urlModel.setPort(baseModel.getUrlModel().getPort());
+                    urlModel.setVersion(baseModel.getUrlModel().getVersion());
                     urlModel.setPath(CommonUtil.toStr(apiDetail.get(PATH)));
                     requestModel.setUrlModel(urlModel);
                 }catch (Exception e){
@@ -63,9 +65,30 @@ public class ParseBase {
                 }else {
                     requestModel.setMethod(baseModel.getMethod());
                 }
-                //处理
+                //处理params
+                if (apiDetail.containsKey(PARAMS)){
+                    Map params = (Map) apiDetail.get(PARAMS);
+                    requestModel.getUrlModel().setParams(params);
+                }
+                //处理headers
+                Map copy = new HashMap();
+                Map headers = new HashMap();
+                if (baseModel.getHeaders() != null){
+                    copy.putAll(baseModel.getHeaders());
+                }
+                if (apiDetail.containsKey(HEADERS)){
+                    headers = (Map) apiDetail.get(HEADERS);
+                }
+                requestModel.setHeaders(CommonUtil.mergeMap(copy,headers));
+                //处理body
+                if (apiDetail.containsKey(BODY)){
+                    Map body = (Map) apiDetail.get(BODY);
+                    requestModel.setBody(body);
+                }
+                apisDetail.put(apiKey,requestModel);
 
             }
+            apis.put(moduleKey,apisDetail);
         }
         return apis;
     }

@@ -6,7 +6,7 @@ public class RequestModel {
     private UrlModel urlModel;
     private String method = "";
     private Map<String,String> headers;
-    private Map<String,String> body;
+    private Map body;
 
     public UrlModel getUrlModel() {
         return urlModel;
@@ -32,11 +32,21 @@ public class RequestModel {
         this.headers = headers;
     }
 
-    public Map<String, String> getBody() {
+    public Map getBody() {
         return body;
     }
 
-    public void setBody(Map<String, String> body) {
+    public void setBody(Map body) {
         this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestModel{" +
+                "urlModel=" + urlModel +
+                ", method='" + method + '\'' +
+                ", headers=" + headers +
+                ", body=" + body +
+                '}';
     }
 }

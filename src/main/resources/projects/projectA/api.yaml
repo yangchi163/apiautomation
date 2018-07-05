@@ -1,0 +1,35 @@
+base:
+    url:
+        schema: http
+        host: t.jufandev.com
+        port: 33084
+        version:        #生产：https://merchant.juxiangfen.com/mp
+    method: GET
+    headers:
+        Content-Type: application/json;charset=UTF-8
+        terminal: MOBILE
+        type: ANDROID
+        pushId: als266
+        merchant-portal-token: ${token}
+api:
+#   用户
+    moduleA:
+        获取验证码:
+            method: put
+            path: /mp/common/captcha
+            params:
+                mobile: 15000000000
+
+        #依赖较多,后续写测试用例:invitationcode,captcha(redis)
+    moduleB:
+
+        获取用户类型:
+            method: put
+            url: /mp/user/roleType
+
+        获取平台列表:
+            #    MERCHANT_NAME_ID: 获取平台名称和平台ID的对应关系
+            #    MERCHANT_NAME_CODE: 获取平台名称和平台编号的对应关系
+            url:  /mp/common/merchant/list/MERCHANT_NAME_ID
+
+

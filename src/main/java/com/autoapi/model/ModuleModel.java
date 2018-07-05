@@ -1,13 +1,13 @@
 package com.autoapi.model;
 
-import java.util.List;
 import java.util.Map;
 
 public class ModuleModel {
+    private String name;
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
-    private List<ApiModel> apis;
+    private Map<String,ApiModel> apis;
 
     public Map<String, String> getVar() {
         return var;
@@ -33,11 +33,22 @@ public class ModuleModel {
         this.teardown = teardown;
     }
 
-    public List<ApiModel> getApis() {
+    public Map<String, ApiModel> getApis() {
         return apis;
     }
 
-    public void setApis(List<ApiModel> apis) {
+    public void setApis(Map<String, ApiModel> apis) {
         this.apis = apis;
+    }
+
+    @Override
+    public String toString() {
+        return "ModuleModel{" +
+                "name='" + name + '\'' +
+                ", var=" + var +
+                ", setup=" + setup +
+                ", teardown=" + teardown +
+                ", apis=" + apis +
+                '}';
     }
 }

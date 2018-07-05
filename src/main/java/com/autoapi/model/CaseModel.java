@@ -3,11 +3,16 @@ package com.autoapi.model;
 import java.util.Map;
 
 public class CaseModel {
+    private String name;
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
     private RequestModel request;
     private AssertModel asserts;
+
+    public CaseModel(String name) {
+        this.name = name;
+    }
 
     public Map<String, String> getVar() {
         return var;
@@ -47,5 +52,17 @@ public class CaseModel {
 
     public void setAsserts(AssertModel asserts) {
         this.asserts = asserts;
+    }
+
+    @Override
+    public String toString() {
+        return "CaseModel{" +
+                "name='" + name + '\'' +
+                ", var=" + var +
+                ", setup=" + setup +
+                ", teardown=" + teardown +
+                ", request=" + request +
+                ", asserts=" + asserts +
+                '}';
     }
 }

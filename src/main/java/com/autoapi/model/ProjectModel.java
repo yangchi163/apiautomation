@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ProjectModel {
+    private String name;
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
-    private List<ModuleModel> modules;
+    private Map<String,ModuleModel> modules;
 
     public Map<String, String> getVar() {
         return var;
@@ -33,11 +34,22 @@ public class ProjectModel {
         this.teardown = teardown;
     }
 
-    public List<ModuleModel> getModules() {
+    public Map<String, ModuleModel> getModules() {
         return modules;
     }
 
-    public void setModules(List<ModuleModel> modules) {
+    public void setModules(Map<String, ModuleModel> modules) {
         this.modules = modules;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectModel{" +
+                "name='" + name + '\'' +
+                ", var=" + var +
+                ", setup=" + setup +
+                ", teardown=" + teardown +
+                ", modules=" + modules +
+                '}';
     }
 }

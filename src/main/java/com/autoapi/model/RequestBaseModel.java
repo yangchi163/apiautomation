@@ -3,9 +3,9 @@ package com.autoapi.model;
 import java.util.Map;
 
 public class RequestBaseModel {
-    public UrlModel urlModel;
-    public String method = "";
-    public Map<String,String> headers;
+    private UrlModel urlModel;
+    private String method = "";
+    private Map<String,String> headers;
 
 
     public UrlModel getUrlModel() {

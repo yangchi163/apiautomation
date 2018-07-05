@@ -8,7 +8,7 @@ import java.util.List;
 public class ParseDirecotory {
     private List<String[]> list = new ArrayList();
     public String basePath = System.getProperty("user.dir") + File.separator +"src"
-            + File.separator + "main" + File.separator + "resources";
+            + File.separator + "main" + File.separator + "resources" + File.separator + "projects";
 
     public ParseDirecotory() {
     }
@@ -30,7 +30,7 @@ public class ParseDirecotory {
      * @param dirPath
      * @return
      */
-    public List<String[]> listFiles(String dirPath,String basePath){
+    private List<String[]> listFiles(String dirPath,String basePath){
         File file = new File(dirPath);
         if (file.exists()){
             File[] files = file.listFiles();

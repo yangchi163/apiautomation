@@ -1,5 +1,6 @@
 package com.autoapi.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ public class ApiModel {
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
-    private Map<String,CaseModel> cases;
+    private Map<String,CaseModel> cases = new HashMap<String, CaseModel>();
 
     public ApiModel(String name) {
         this.name = name;

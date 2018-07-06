@@ -1,5 +1,6 @@
 package com.autoapi.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,19 @@ public class ProjectModel {
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
-    private Map<String,ModuleModel> modules;
+    private Map<String,ModuleModel> modules = new HashMap<String, ModuleModel>();
+
+    public ProjectModel(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Map<String, String> getVar() {
         return var;

@@ -13,4 +13,6 @@ public class RequestKeyWords {
     public static final String BASE = "base";
     public static final String API = "api";
     public static final String PATH = "path";
+    public static final String VAR = "var";
+    public static final String TESTCASE = "test-case";
 }

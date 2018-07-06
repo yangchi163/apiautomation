@@ -1,18 +1,18 @@
+import com.autoapi.parse.ParseApiConfig.ParseApiConfig;
 import com.autoapi.parse.ParseBase;
-import com.autoapi.parse.ParseDirecotory;
+import com.autoapi.parse.ParseApiConfig.ParseDirecotory;
 import com.autoapi.util.YamlUtil;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Practice {
     @Test
     public void prac() {
-        Map map = YamlUtil.read("/Users/chiyang/IdeaProjects/apiautomation/src/main/resources/api.yaml");
-        Map map1 = (Map) map.get("base");
-        System.out.println(map1.get("url"));
+        Map map = YamlUtil.read(
+                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\moduleA\\获取验证码.yaml");
+        System.out.println(map);
 
 
     }
@@ -25,10 +25,16 @@ public class Practice {
     }
 
     @Test
-    public void prac3() {
-        Map m = new HashMap();
-        m.put("a",null);
-        m.put("b",null);
-        System.out.println(m);
+    public void prac3() throws Exception {
+        ParseDirecotory p = new ParseDirecotory();
+        List<String[]> l = p.listFiles();
+//        for (String[] str : l){
+//            for (String s: str){
+//                System.out.print(s+"  ");
+//            }
+//            System.out.println(" ");
+//        }
+        ParseApiConfig parseApiConfig = new ParseApiConfig(l);
+        System.out.println(parseApiConfig.getApiConfig());
     }
 }

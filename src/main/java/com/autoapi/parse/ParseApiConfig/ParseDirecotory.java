@@ -1,4 +1,4 @@
-package com.autoapi.parse;
+package com.autoapi.parse.ParseApiConfig;
 
 import java.io.File;
 import java.util.ArrayList;

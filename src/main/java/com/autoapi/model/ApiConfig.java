@@ -1,11 +1,12 @@
 package com.autoapi.model;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ApiConfig {
     private RunConfig runConfig;
-    private Map projects;
+    private Map<String,ProjectModel> projects = new HashMap<String, ProjectModel>();
 
     public RunConfig getRunConfig() {
         return runConfig;

@@ -1,5 +1,6 @@
 package com.autoapi.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ModuleModel {
@@ -7,7 +8,11 @@ public class ModuleModel {
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
-    private Map<String,ApiModel> apis;
+    private Map<String,ApiModel> apis = new HashMap<String, ApiModel>();
+
+    public ModuleModel(String name) {
+        this.name = name;
+    }
 
     public Map<String, String> getVar() {
         return var;

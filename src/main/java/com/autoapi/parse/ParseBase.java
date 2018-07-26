@@ -1,8 +1,6 @@
 package com.autoapi.parse;
 
-import com.autoapi.model.RequestBaseModel;
-import com.autoapi.model.RequestModel;
-import com.autoapi.model.UrlModel;
+import com.autoapi.model.*;
 import com.autoapi.util.CommonUtil;
 import com.autoapi.util.YamlUtil;
 
@@ -14,16 +12,14 @@ import static com.autoapi.keywords.RequestKeyWords.*;
  * 解析api.yaml
  */
 public class ParseBase {
-    //最终返回的api信息，只有配置，没有具体参数，待组装
-    private Map apis;
-
-    private RequestBaseModel baseModel;
+    private RequestBaseModel baseModel = new RequestBaseModel();
     private Map api ;
     private String filePath;
 
+    private ProjectModel projectBaseModel = new ProjectModel();
+
     public ParseBase(String filePath) {
         this.filePath = filePath;
-        baseModel = new RequestBaseModel();
     }
 
     /**
@@ -31,14 +27,12 @@ public class ParseBase {
      * @return
      * @throws Exception
      */
-    public Map getApis() throws Exception {
+    public ProjectModel getApiBaseModel() throws Exception {
         parseBase();
-        apis = new HashMap();
         //模块层
         for (Object moduleKey : api.keySet()){
-            //apis.put(moduleKey,new HashMap());
-            //用来存放模块下所有api信息
-            Map apisDetail = new HashMap();
+            //解析模块
+            ModuleModel moduleModel = new ModuleModel((String) moduleKey);
             //得到一组api
             Map apiDetails = (Map) api.get(moduleKey);
             //api层
@@ -46,7 +40,8 @@ public class ParseBase {
                 //单个api信息
                 Map apiDetail = (Map) apiDetails.get(apiKey);
                 //组装request
-                RequestModel requestModel = new RequestModel();
+                ApiModel apiModel = new ApiModel((String) apiKey);
+                RequestModel requestModel = new RequestModel((String) apiKey);
                 //处理path，一定要有
                 try {
                     UrlModel urlModel = new UrlModel();
@@ -85,12 +80,13 @@ public class ParseBase {
                     Map body = (Map) apiDetail.get(BODY);
                     requestModel.setBody(body);
                 }
-                apisDetail.put(apiKey,requestModel);
+                apiModel.setRequestModel(requestModel);
+                moduleModel.getApis().put(apiModel.getName(),apiModel);
 
             }
-            apis.put(moduleKey,apisDetail);
+            projectBaseModel.getModules().put(moduleModel.getName(),moduleModel);
         }
-        return apis;
+        return projectBaseModel;
     }
 
 

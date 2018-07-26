@@ -7,7 +7,7 @@ public class CaseModel {
     private Map<String,String> var;
     private FixtureModel setup;
     private FixtureModel teardown;
-    private RequestModel request;
+    private RequestModel request = new RequestModel("");
     private AssertModel asserts;
 
     public CaseModel(String name) {

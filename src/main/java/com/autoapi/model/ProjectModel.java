@@ -11,6 +11,9 @@ public class ProjectModel {
     private FixtureModel teardown;
     private Map<String,ModuleModel> modules = new HashMap<String, ModuleModel>();
 
+    public ProjectModel() {
+    }
+
     public ProjectModel(String name) {
         this.name = name;
     }

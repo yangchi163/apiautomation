@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 生成/src/main/resources/projects下文件排列的列表,一个数组代表一个文件，数组内数据代表路径
+ */
 public class ParseDirecotory {
     private List<String[]> list = new ArrayList();
     public String basePath = System.getProperty("user.dir") + File.separator +"src"
@@ -18,7 +20,7 @@ public class ParseDirecotory {
     }
 
     /**
-     * 返回的是/src/main/resources下文件排列的列表,一个数组代表一个文件，数组内数据代表路径
+     * 返回的是/src/main/resources/projects下文件排列的列表,一个数组代表一个文件，数组内数据代表路径
      *[[a,b],[],……]
      * @return
      */

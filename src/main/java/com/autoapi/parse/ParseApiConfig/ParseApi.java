@@ -7,6 +7,9 @@ import com.autoapi.util.YamlUtil;
 import java.util.Map;
 import static com.autoapi.keywords.RequestKeyWords.*;
 
+/**
+ * 解析case文件
+ */
 public class ParseApi {
     private Map<String,String> vars;                                  //变量
     private Map<String,CaseModel> cases;               //case

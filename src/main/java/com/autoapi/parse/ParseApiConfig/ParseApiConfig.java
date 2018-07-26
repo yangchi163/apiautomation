@@ -10,6 +10,9 @@ import java.util.Map;
 
 import static com.autoapi.keywords.FileKeeyWords.*;
 
+/**
+ * 根据directory，生成runconfig的骨架
+ */
 public class ParseApiConfig {
     private ApiConfig apiConfig;
 

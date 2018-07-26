@@ -6,13 +6,26 @@ import java.util.Map;
 
 public class ApiModel {
     private String name;
-    private Map<String,String> var;
+    private RequestModel requestModel;
+    private Map<String,String> var = new HashMap<String, String>();
     private FixtureModel setup;
     private FixtureModel teardown;
     private Map<String,CaseModel> cases = new HashMap<String, CaseModel>();
 
     public ApiModel(String name) {
         this.name = name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public RequestModel getRequestModel() {
+        return requestModel;
+    }
+
+    public void setRequestModel(RequestModel requestModel) {
+        this.requestModel = requestModel;
     }
 
     public String getName() {
@@ -55,6 +68,7 @@ public class ApiModel {
     public String toString() {
         return "ApiModel{" +
                 "name='" + name + '\'' +
+                ", requestModel=" + requestModel +
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +

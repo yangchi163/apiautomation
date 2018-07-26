@@ -1,5 +1,6 @@
 package com.autoapi.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class UrlModel {
@@ -8,7 +9,7 @@ public class UrlModel {
     private String port = "";
     private String version = "";
     private String path = "";
-    private Map params;
+    private Map params = new HashMap();
 
     public Map getParams() {
         return params;

@@ -4,11 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProjectModel {
-    private String name;
-    private Map<String,String> var;
-    private FixtureModel setup;
-    private FixtureModel teardown;
+public class ProjectModel extends BaseModel{
     private Map<String,ModuleModel> modules = new HashMap<String, ModuleModel>();
 
     public ProjectModel() {
@@ -16,38 +12,6 @@ public class ProjectModel {
 
     public ProjectModel(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Map<String, String> getVar() {
-        return var;
-    }
-
-    public void setVar(Map<String, String> var) {
-        this.var = var;
-    }
-
-    public FixtureModel getSetup() {
-        return setup;
-    }
-
-    public void setSetup(FixtureModel setup) {
-        this.setup = setup;
-    }
-
-    public FixtureModel getTeardown() {
-        return teardown;
-    }
-
-    public void setTeardown(FixtureModel teardown) {
-        this.teardown = teardown;
     }
 
     public Map<String, ModuleModel> getModules() {
@@ -61,11 +25,11 @@ public class ProjectModel {
     @Override
     public String toString() {
         return "ProjectModel{" +
-                "name='" + name + '\'' +
+                "modules=" + modules +
+                ", name='" + name + '\'' +
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
-                ", modules=" + modules +
                 '}';
     }
 }

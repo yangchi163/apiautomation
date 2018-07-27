@@ -13,12 +13,13 @@ base:
         merchant-portal-token: ${token}
 api:
 #   用户
-    moduleA:
-        获取验证码:
-            method: put
-            path: /mp/common/captcha
-            params:
-                mobile: 15000000000
+    用户:
+        登录:
+            method: post
+            path: /mp/user/login/password
+            data:
+                accountName: "16666666662"
+                password: qqq123
 
         #依赖较多,后续写测试用例:invitationcode,captcha(redis)
     moduleB:

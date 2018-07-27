@@ -49,14 +49,14 @@ public class ParseBase {
                     urlModel.setHost(baseModel.getUrlModel().getHost());
                     urlModel.setPort(baseModel.getUrlModel().getPort());
                     urlModel.setVersion(baseModel.getUrlModel().getVersion());
-                    urlModel.setPath(CommonUtil.toStr(apiDetail.get(PATH)));
+                    urlModel.setPath((String) apiDetail.get(PATH));
                     requestModel.setUrlModel(urlModel);
                 }catch (Exception e){
                     throw new Exception("api.yaml.api." + moduleKey + "." +apiKey + "缺少path");
                 }
                 //处理method
                 if (apiDetail.containsKey(METHOD)){
-                    requestModel.setMethod(CommonUtil.toStr(apiDetail.get(METHOD)));
+                    requestModel.setMethod((String) apiDetail.get(METHOD));
                 }else {
                     requestModel.setMethod(baseModel.getMethod());
                 }
@@ -103,10 +103,10 @@ public class ParseBase {
         UrlModel urlModel = new UrlModel();
         try{
             Map url = (Map) base.get(URL);
-            String schema = CommonUtil.toStr(url.get(SCHEMA));
-            String host = CommonUtil.toStr(url.get(HOST));
-            String port = CommonUtil.toStr(url.get(PORT));
-            String version = CommonUtil.toStr(url.get(VERSION));
+            String schema = (String) url.get(SCHEMA);
+            String host = (String) url.get(HOST);
+            Integer port = (Integer) url.get(PORT);
+            String version = (String) url.get(VERSION);
             urlModel.setSchema(schema);
             urlModel.setHost(host);
             urlModel.setPort(port);
@@ -118,7 +118,7 @@ public class ParseBase {
         }
         //解析method
         if (base.containsKey(METHOD)){
-            baseModel.setMethod(CommonUtil.toStr(base.get(METHOD)));
+            baseModel.setMethod((String) base.get(METHOD));
         }
         //解析headers
         if (base.containsKey(HEADERS)){

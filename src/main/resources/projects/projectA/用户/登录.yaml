@@ -1,0 +1,16 @@
+
+var:
+    valid: 15000000000
+    invalid: 150000000
+
+setup:
+
+
+teardown:
+
+
+test-case:
+    合法手机号:
+      data:
+        accountName: "15021415241"
+        password: "123456"

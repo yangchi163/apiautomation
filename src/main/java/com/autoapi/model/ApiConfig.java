@@ -16,11 +16,11 @@ public class ApiConfig {
         this.runConfig = runConfig;
     }
 
-    public Map getProjects() {
+    public Map<String, ProjectModel> getProjects() {
         return projects;
     }
 
-    public void setProjects(Map projects) {
+    public void setProjects(Map<String, ProjectModel> projects) {
         this.projects = projects;
     }
 

@@ -1,0 +1,22 @@
+var:
+  a: hh
+  b: {name: xiaoqiang,age: 9}
+  z: [a,b,c]
+  d:
+    name: dname
+    age: dage
+  e:
+    - e2
+    - e1
+
+setup:
+  - api
+    - api2
+
+    - api1
+
+  - sql
+    - sql1
+    - sql2
+
+teardown:

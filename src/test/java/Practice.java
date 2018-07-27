@@ -1,3 +1,8 @@
+import com.autoapi.domain.ApiRun;
+import com.autoapi.httprequest.HttpClientUtil;
+import com.autoapi.model.UrlModel;
+import com.autoapi.model.http.HttpClientRequest;
+import com.autoapi.model.http.HttpClientResponse;
 import com.autoapi.parse.ParseApiConfig.ParseApi;
 import com.autoapi.parse.ParseApiConfig.ParseApiConfig;
 import com.autoapi.parse.ParseBase;
@@ -7,6 +12,7 @@ import com.autoapi.util.YamlUtil;
 import javafx.beans.binding.ObjectExpression;
 import org.testng.annotations.Test;
 
+import java.net.URL;
 import java.text.Format;
 import java.util.HashMap;
 import java.util.List;
@@ -15,25 +21,22 @@ import java.util.Map;
 public class Practice {
     @Test
     public void prac() {
-//        Map map = YamlUtil.read(
-//                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\moduleA\\获取验证码.yaml");
-//        System.out.println(map);
-        ParseDirecotory parseDirecotory = new ParseDirecotory();
-        List<String[]> l = parseDirecotory.getCasePath();
-        for (String[] s : l ){
-            for (String v : s){
-                System.out.print(v + "    ");
-            }
-            System.out.println("");
+        Map map = YamlUtil.read(
+                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\project.yaml");
+        for (Object Key : map.keySet()){
+            System.out.println(Key);
         }
-    }
+        System.out.println(map);
 
+
+
+    }
     @Test
     public void prac2() throws Exception {
-//        ParseBase parseBase = new ParseBase(
-//                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\api.yaml");
-//        System.out.println(parseBase.getApiBaseModel());
-//        ParseApi parseApi = new ParseApi("projectA","moduleA","获取验证码.yaml");
+        ParseBase parseBase = new ParseBase(
+                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\用户\\登录.yaml");
+        System.out.println(parseBase.getApiBaseModel());
+        ParseApi parseApi = new ParseApi("projectA","moduleA","获取验证码.yaml");
 
 
     }
@@ -42,27 +45,49 @@ public class Practice {
     public void prac4() throws Exception {
         ParseDirecotory parseDirecotory = new ParseDirecotory();
         List<String[]> l = parseDirecotory.getCasePath();
+//        System.out.println(l);
+//        for (String[] s : l){
+//            for (String v : s){
+//                System.out.print(v+ "        ");
+//            }
+//            System.out.println("****");
+//        }
         ParseApiConfig parseApiConfig = new ParseApiConfig(l);
         System.out.println(parseApiConfig.getApiConfig());
     }
     @Test
     public void prac3() throws Exception {
-        Map p = new HashMap();
-        Map d = new HashMap();
-        p.put("dog",d);
-        d.put("name","xiaoqiang");
-        d.put("age",10);
-        p.put("name","zhangsna");
-        System.out.println(p);
-        Map p2 = new HashMap();
-        Map d2 = new HashMap();
-        d2.put("age",5);
-        d2.put("sex","female");
-        p2.put("dog",d2);
-        p2.put("sex","male");
-        p2.put("name","lisi");
-        System.out.println(p2);
-        Map res = CommonUtil.mergeMap(p,p2);
-        System.out.println(res);
+        ApiRun apiRun = new ApiRun();
+        apiRun.run("projectA","用户","登录","合法手机号");
+//        UrlModel urlModel = new UrlModel();
+//        urlModel.setSchema("http");
+//        urlModel.setHost("www.baidu.com");
+//        urlModel.setPort(1234);
+//        urlModel.setVersion("v1");
+//        urlModel.setPath("login/password");
+//        Map map = new HashMap();
+//        map.put("name","xiaoqiang");
+//        map.put("age","9");
+//        urlModel.setParams(map);
+//        System.out.println(new ApiRun().getUrl(urlModel));
     }
+
+    @Test
+    public void prac5() throws Exception {
+        HttpClientUtil clientUtil = new HttpClientUtil();
+        HttpClientRequest request = new HttpClientRequest();
+        Map headers = new HashMap();
+        headers.put("Content-Type","application/json");
+        Map body = new HashMap();
+        body.put("accountName","16666666662");
+        body.put("password","qqq123");
+        request.setUrl("http://t.jufandev.com:33084/mp/user/login/password");
+        request.setHeaders(headers);
+        request.setBody(body);
+        request.setMethod("posT");
+        HttpClientResponse response = clientUtil.doRequest(request);
+        System.out.println(request);
+        System.out.println(response);
+    }
+
 }

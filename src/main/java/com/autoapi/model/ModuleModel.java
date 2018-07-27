@@ -3,47 +3,11 @@ package com.autoapi.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModuleModel {
-    private String name;
-    private Map<String,String> var;
-    private FixtureModel setup;
-    private FixtureModel teardown;
+public class ModuleModel extends BaseModel{
     private Map<String,ApiModel> apis = new HashMap<String, ApiModel>();
 
     public ModuleModel(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Map<String, String> getVar() {
-        return var;
-    }
-
-    public void setVar(Map<String, String> var) {
-        this.var = var;
-    }
-
-    public FixtureModel getSetup() {
-        return setup;
-    }
-
-    public void setSetup(FixtureModel setup) {
-        this.setup = setup;
-    }
-
-    public FixtureModel getTeardown() {
-        return teardown;
-    }
-
-    public void setTeardown(FixtureModel teardown) {
-        this.teardown = teardown;
     }
 
     public Map<String, ApiModel> getApis() {
@@ -57,11 +21,11 @@ public class ModuleModel {
     @Override
     public String toString() {
         return "ModuleModel{" +
-                "name='" + name + '\'' +
+                "apis=" + apis +
+                ", name='" + name + '\'' +
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
-                ", apis=" + apis +
                 '}';
     }
 }

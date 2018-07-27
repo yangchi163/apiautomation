@@ -1,15 +1,14 @@
 package com.autoapi.model;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UrlModel {
     private String schema = "";
     private String host = "";
-    private String port = "";
+    private int port ;
     private String version = "";
     private String path = "";
-    private Map params = new HashMap();
+    private Map params;
 
     public Map getParams() {
         return params;
@@ -24,7 +23,9 @@ public class UrlModel {
     }
 
     public void setSchema(String schema) {
-        this.schema = schema;
+        if(schema != null){
+            this.schema = schema;
+        }
     }
 
     public String getHost() {
@@ -35,11 +36,11 @@ public class UrlModel {
         this.host = host;
     }
 
-    public String getPort() {
+    public int getPort() {
         return port;
     }
 
-    public void setPort(String port) {
+    public void setPort(int port) {
         this.port = port;
     }
 

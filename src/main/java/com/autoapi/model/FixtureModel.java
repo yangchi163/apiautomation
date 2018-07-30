@@ -4,30 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 public class FixtureModel {
-    private Map<String,ApiModel> apis;
-    private List<SqlModel> sql;
+    //形如[{sql=[{sql=h, conn=ss}, {sql=hhe, conn=sss}]}, {sql=[{sql=h, conn=ss}, {sql=hhe, conn=sss}]}]
+    private List fixture;
 
-    public Map<String, ApiModel> getApis() {
-        return apis;
+    public List getFixture() {
+        return fixture;
     }
 
-    public void setApis(Map<String, ApiModel> apis) {
-        this.apis = apis;
-    }
-
-    public List<SqlModel> getSql() {
-        return sql;
-    }
-
-    public void setSql(List<SqlModel> sql) {
-        this.sql = sql;
+    public void setFixture(List fixture) {
+        this.fixture = fixture;
     }
 
     @Override
     public String toString() {
         return "FixtureModel{" +
-                "apis=" + apis +
-                ", sql=" + sql +
+                "fixture=" + fixture +
                 '}';
     }
 }

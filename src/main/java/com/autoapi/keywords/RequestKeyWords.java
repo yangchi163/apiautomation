@@ -15,8 +15,14 @@ public class RequestKeyWords {
     public static final String PATH = "path";
     public static final String VAR = "var";
     public static final String TESTCASE = "test-case";
+    //fixture模块key
     public static final String SETUP = "setup";
     public static final String TEARDOWN = "teardown";
+    public static final String SQL = "sql";
+    public static final String CONN = "conn";
+    public static final String RES = "res";
+    public static final String RESLIST = "resList";
+    public static final String OUTPUT = "output";
 
     //请求方法
     public static final String PUT = "put";

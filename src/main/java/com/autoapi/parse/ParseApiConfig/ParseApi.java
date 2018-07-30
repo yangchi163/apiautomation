@@ -3,11 +3,10 @@ package com.autoapi.parse.ParseApiConfig;
 import com.autoapi.keywords.FileKeyWords;
 import com.autoapi.model.*;
 import com.autoapi.parse.ParseBase;
-import com.autoapi.util.CommonUtil;
+import com.autoapi.parse.ParseUtil;
 import com.autoapi.util.YamlUtil;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import static com.autoapi.keywords.RequestKeyWords.*;
 
@@ -50,7 +49,7 @@ public class ParseApi {
     private void parseCase(String apiPath) throws Exception {
         setApiBaseModel();
         Map map = YamlUtil.read(apiPath);
-        //解析var
+        //解析api级var
         if (map.containsKey(VAR)){
              Map vars_temp= (Map) map.get(VAR);
                  apiModel.setVar(vars_temp);
@@ -61,48 +60,9 @@ public class ParseApi {
             Map cases = (Map) map.get(TESTCASE);
             for(Object caseKey : cases.keySet()){
                 Map caseDetail = (Map) cases.get(caseKey);
-                CaseModel caseModel = new CaseModel((String) caseKey);
                 RequestModel requestModelFromBase =  apiBaseModel.getModules().get(this.modulePath).getApis().get(this.apiPath).getRequestModel();
-                //组装request.urlmodel
-                caseModel.getRequest().setUrlModel(requestModelFromBase.getUrlModel());
-                //组装request.method
-                caseModel.getRequest().setMethod(requestModelFromBase.getMethod());
-                //组装request.headers,params,body
-                Map<String,String> headersFromCase = new HashMap<String, String>();
-                Map paramsFromCase = new HashMap();
-                Map bodyFromCase = new HashMap();
-                if (caseDetail != null){
-                    //获取case中的信息
-                    if (caseDetail.containsKey(HEADERS)){
-                        headersFromCase = (Map<String, String>) caseDetail.get(HEADERS);
-                    }
-                    if (caseDetail.containsKey(PARAMS)){
-                        paramsFromCase = (Map) caseDetail.get(PARAMS);
-                    }
-                    if (caseDetail.containsKey(BODY)){
-                        bodyFromCase = (Map) caseDetail.get(BODY);
-                    }
-                    //设置var
-                    if (caseDetail.containsKey(VAR)){
-                        caseModel.setVar((Map) caseDetail.get(VAR));
-                    }
-                    //设置setup
-                    if (caseDetail.containsKey(SETUP)){
-
-                    }
-                    //设置teardown
-                    if (caseDetail.containsKey(TEARDOWN)){
-
-                    }
-                }
-                //将case中的信息和base中的信息合并
-                Map headers = CommonUtil.mergeMap(requestModelFromBase.getHeaders(),headersFromCase);
-                caseModel.getRequest().setHeaders(headers);
-                Map params = CommonUtil.mergeMap(caseModel.getRequest().getUrlModel().getParams(),paramsFromCase);
-                caseModel.getRequest().getUrlModel().setParams(params);
-                Map body = CommonUtil.mergeMap(requestModelFromBase.getBody(),bodyFromCase);
-                caseModel.getRequest().setBody(body);
-                //casemodel组装好，并放入apimodel下
+                CaseModel caseModel = ParseUtil.getCaseModel(caseDetail,requestModelFromBase);
+                caseModel.setName((String) caseKey);
                 apiModel.getCases().put((String) caseKey,caseModel);
             }
 

@@ -1,1 +1,21 @@
 var:
+  name: name2
+  age: age2
+setup:
+  -
+    sql:
+      -
+        sql: sle  * from table where username = '';
+        conn: ss
+        res:
+      -
+        sql: hhe
+        conn: sss
+  -
+    api:
+      -
+        projectA.用户.登录:
+          data:
+            a: aa
+          output: rs
+

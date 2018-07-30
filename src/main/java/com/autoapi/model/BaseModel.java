@@ -1,10 +1,11 @@
 package com.autoapi.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class BaseModel {
     public String name;
-    public Map var;
+    public Map var = new HashMap();
     public FixtureModel setup;
     public FixtureModel teardown;
 
@@ -49,4 +50,5 @@ public class BaseModel {
                 ", teardown=" + teardown +
                 '}';
     }
+
 }

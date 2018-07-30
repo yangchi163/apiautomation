@@ -92,11 +92,11 @@ public class ParseApiConfig {
     }
 
     /**
-     * 解析project.yaml,module.yaml……中的var,setup,teardown
+     * 解析project.yaml,module.yaml……中的var,setup,teardown,api级和case级的var放在parseApi中解析
      * @param baseModel
      * @param configPath
      */
-    private void parseOtherConfig(BaseModel baseModel,String[] configPath){
+    private void parseOtherConfig(BaseModel baseModel,String[] configPath) throws Exception {
         String filePath = FileKeyWords.CASEBASEPATH;
         for (String s : configPath){
             filePath = filePath + File.separator + s;
@@ -106,13 +106,16 @@ public class ParseApiConfig {
         if (mapFromConfig.containsKey(VAR)){
             baseModel.setVar((Map) mapFromConfig.get(VAR));
         }
-        //setup,teardown  后续再解析
-//        if (mapFromConfig.containsKey(SETUP)){
-//            baseModel.setSetup((FixtureModel) mapFromConfig.get(SETUP));
-//        }
-//        if (mapFromConfig.containsKey(TEARDOWN)){
-//            baseModel.setTeardown((FixtureModel) mapFromConfig.get(TEARDOWN));
-//        }
+        //setup
+        if (mapFromConfig.containsKey(SETUP)){
+            ParseFixture parseFixture = new ParseFixture();
+            baseModel.setSetup(parseFixture.getFixtureModel(mapFromConfig,SETUP));
+        }
+        //teardown
+        if (mapFromConfig.containsKey(TEARDOWN)){
+            ParseFixture parseFixture = new ParseFixture();
+            baseModel.setSetup(parseFixture.getFixtureModel(mapFromConfig,TEARDOWN));
+        }
 
     }
 }

@@ -10,13 +10,6 @@ var:
     - e1
 
 setup:
-  - api
-    - api2
 
-    - api1
-
-  - sql
-    - sql1
-    - sql2
 
 teardown:

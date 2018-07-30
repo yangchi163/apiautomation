@@ -35,10 +35,48 @@ public class ApiRun {
         //执行请求,获得相应
         HttpClientUtil clientUtil = new HttpClientUtil();
         HttpClientResponse response = clientUtil.doRequest(request);
-        System.out.println(request);
         System.out.println(response);
-
     }
+
+    /**
+     * 获得请求数据中变量对应的值
+     * @param varPath 变量对应的路径数组 project-module-api-case-varname
+     * @return
+     */
+    private Object getReplaceValue(String[] varPath){
+        Object res = null;
+        String varName = varPath[varPath.length - 1];
+        ProjectModel projectModel = null;
+        ModuleModel moduleModel = null;
+        ApiModel apiModel = null;
+        CaseModel caseModel;
+        if (varPath.length > 1){
+            projectModel = this.apiConfig.getProjects().get(varPath[0]);
+            if (projectModel.getVar().containsKey(varName)){
+                res = projectModel.getVar().get(varName);
+            }
+        }
+        if (varPath.length > 2){
+            moduleModel = projectModel.getModules().get(varPath[1]);
+            if (projectModel.getVar().containsKey(varName)){
+                res = moduleModel.getVar().get(varName);
+            }
+        }
+        if (varPath.length > 3){
+            apiModel = moduleModel.getApis().get(varPath[2]);
+            if (projectModel.getVar().containsKey(varName)){
+                res = apiModel.getVar().get(varName);
+            }
+        }
+        if (varPath.length > 4){
+            caseModel = apiModel.getCases().get(varPath[3]);
+            if (projectModel.getVar().containsKey(varName)){
+                res = caseModel.getVar().get(varName);
+            }
+        }
+        return res;
+    }
+
     /**
      * 将casemodel转化成HttpClientRequest，此时变量已替换完成
      * @param caseModel

@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import java.net.URL;
 import java.text.Format;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +23,16 @@ public class Practice {
     @Test
     public void prac() {
         Map map = YamlUtil.read(
-                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\project.yaml");
-        for (Object Key : map.keySet()){
-            System.out.println(Key);
+                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\用户\\module.yaml");
+//        System.out.println(map);
+        List l = (List) map.get("setup");
+        System.out.println(map.get("setup"));
+        for (Object o : l){
+            Map m = (Map) o;
+            if (m.containsKey("sql")){
+                System.out.println(m.get("sql"));
+            }
         }
-        System.out.println(map);
 
 
 
@@ -88,6 +94,11 @@ public class Practice {
         HttpClientResponse response = clientUtil.doRequest(request);
         System.out.println(request);
         System.out.println(response);
+    }
+
+    @Test
+    public void prac6() throws Exception {
+
     }
 
 }

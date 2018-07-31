@@ -23,16 +23,11 @@ public class Practice {
     @Test
     public void prac() {
         Map map = YamlUtil.read(
-                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\用户\\module.yaml");
-//        System.out.println(map);
-        List l = (List) map.get("setup");
-        System.out.println(map.get("setup"));
-        for (Object o : l){
-            Map m = (Map) o;
-            if (m.containsKey("sql")){
-                System.out.println(m.get("sql"));
-            }
-        }
+                "C:\\Users\\yangchi\\IdeaProjects\\apiautomation\\src\\main\\resources\\projects\\projectA\\project.yaml");
+        System.out.println(map);
+        Map map2 = (Map) map.get("var");
+        System.out.println(map2.get("a").getClass());
+
 
 
 
@@ -98,7 +93,8 @@ public class Practice {
 
     @Test
     public void prac6() throws Exception {
-
+        String s = "abd{ss}{ff}";
+        System.out.println(CommonUtil.getFirstString(s));
     }
 
 }

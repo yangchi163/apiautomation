@@ -64,8 +64,9 @@ public class ParseApi {
                 CaseModel caseModel = ParseUtil.getCaseModel(caseDetail,requestModelFromBase);
                 caseModel.setName((String) caseKey);
                 apiModel.getCases().put((String) caseKey,caseModel);
+                //父节点计数+1
+                apiModel.setSonNumber();
             }
-
         }
 
     }

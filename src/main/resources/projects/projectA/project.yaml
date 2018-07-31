@@ -1,6 +1,6 @@
 var:
-  a: hh
-  b: {name: xiaoqiang,age: 9}
+  a: ${s}
+  b: {name: s,age: 9}
   z: [a,b,c]
   d:
     name: dname

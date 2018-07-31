@@ -70,6 +70,8 @@ public class ParseApiConfig {
                 } else {
                     if (!modules.containsKey(modulePath)){
                         modules.put(modulePath, new ModuleModel(modulePath));
+                        //父节点计数+1
+                        projects.get(projectPath).setSonNumber();
                     }
                 }
             }
@@ -83,6 +85,8 @@ public class ParseApiConfig {
                     if (apiPath != null && !apis.containsKey(apiPath)){
                         ParseApi parseApi = new ParseApi(filePath);
                         apis.put(apiPath,parseApi.getApiModel());
+                        //父节点计数+1
+                        projects.get(projectPath).getModules().get(modulePath).setSonNumber();
                     }
                 }
 

@@ -1,5 +1,8 @@
 package com.autoapi.util;
 
+import com.autoapi.model.BaseModel;
+import com.autoapi.model.FixtureModel;
+
 import java.util.Map;
 
 public class CommonUtil {
@@ -42,4 +45,23 @@ public class CommonUtil {
         }
         return a;
     }
+
+    /**
+     * 短期内能满足需求，后期再优化
+     * 注：${${}}不可以如此嵌套使用
+     * 返回匹配到的第一个${}
+     * @param s
+     * @return
+     */
+    public static String getFirstString(String s){
+        int start = s.indexOf("${");
+        int end = s.indexOf("}",start);
+        if (start == -1 || end == -1){
+            return null;
+        }
+        return s.substring(start,end+1);
+    }
+
+
+
 }

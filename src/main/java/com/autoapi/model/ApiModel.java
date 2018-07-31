@@ -36,6 +36,9 @@ public class ApiModel extends BaseModel{
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", sonNumber=" + sonNumber +
+                ", sonHasRunNumber=" + sonHasRunNumber +
+                ", run=" + run +
                 '}';
     }
 }

@@ -62,6 +62,23 @@ public class CommonUtil {
         return s.substring(start,end+1);
     }
 
+    /**
+     * 合并2个数组，有顺序，a中元素在前
+     * @param a
+     * @param b
+     * @return
+     */
+    public static String[] mergeArray(String[] a,String[] b){
+        String[] res = new String[a.length+b.length];
+        for (int i = 0;i<a.length;i++){
+            res[i] = a[i];
+        }
+        for (int j = 0; j<b.length;j++){
+            res[a.length + j] = b[j];
+        }
+        return res;
+    }
+
 
 
 }

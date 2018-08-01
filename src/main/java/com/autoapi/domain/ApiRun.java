@@ -36,6 +36,9 @@ public class ApiRun {
         for (Object keyProject : projectModelMap.keySet()){
             ProjectModel projectModel = projectModelMap.get(keyProject);
             if (projectModel.isRun()){
+                //执行替换变量
+                String[] projectPath = {(String) keyProject};
+                replaceVar(projectModel,projectPath);
                 //执行setup
                 //FixtureModel projectSetup = projectModel.getSetup();
                 Map<String,ModuleModel> moduleModelMap = projectModel.getModules();
@@ -44,7 +47,8 @@ public class ApiRun {
                     ModuleModel moduleModel = moduleModelMap.get(keyModule);
                     if (moduleModel.isRun()){
                         //执行变量替换
-
+                        String[] modulePath = {(String) keyProject, (String) keyModule};
+                        replaceVar(moduleModel,modulePath);
                         //执行setup
                         //FixtureModel moduleSetup = moduleModel.getSetup();
                         Map<String,ApiModel> apiModelMap = moduleModel.getApis();
@@ -52,6 +56,9 @@ public class ApiRun {
                             //api层
                             ApiModel apiModel = apiModelMap.get(keyApi);
                             if (apiModel.isRun()){
+                                //执行变量替换
+                                String[] apiPath = {(String) keyProject, (String) keyModule, (String) keyApi,};
+                                replaceVar(apiModel,apiPath);
                                 //执行setup
                                 //FixtureModel apiSetup = apiModel.getSetup();
                                 Map<String,CaseModel> caseModelMap = apiModel.getCases();
@@ -59,6 +66,9 @@ public class ApiRun {
                                     //case层
                                     CaseModel caseModel = caseModelMap.get(keyCase);
                                     if (caseModel.isRun()){
+                                        //执行变量替换
+                                        String[] casePath = {(String) keyProject, (String) keyModule, (String) keyApi, (String) keyCase};
+                                        replaceVar(caseModel,casePath);
                                         //执行setup
                                         //FixtureModel caseSetup = caseModel.getSetup();
 
@@ -223,39 +233,99 @@ public class ApiRun {
     }
 
     /**
-     * 变量替换
-     * @param o 待替换的变量
-     * @param varPath 当前对象在apiconfig中的路径
+     *
+     * @param o
+     * @param varPath
      */
     private void replaceVar(Object o,String[] varPath){
-        if (o instanceof BaseModel){
-
+        if (o != null){
+            if (o instanceof Map){
+                Map m = (Map) o;
+                for (Object keyMap : m.keySet()){
+                    if (m.get(keyMap) instanceof String){
+                        String v = (String) m.get(keyMap);
+                        m.put(keyMap,getReplaceString(v,varPath));
+                    } else {
+                        replaceVar(m.get(keyMap),varPath);
+                    }
+                }
+            } else if (o instanceof List){
+                //记录list的index
+                int i = 0;
+                List l = (List) o;
+                for (Object ol: l){
+                    if (ol instanceof String){
+                        l.set(i,getReplaceString((String) ol,varPath));
+                    } else {
+                        replaceVar(ol,varPath);
+                    }
+                    i = i + 1;
+                }
+            } else if (o instanceof BaseModel){
+                BaseModel baseModel = (BaseModel) o;
+                //处理var
+                replaceVar(baseModel.getVar(),varPath);
+                //处理fixturemodel.setup
+                replaceVar(baseModel.getSetup(),varPath);
+                //处理fixturemodel.teardown
+                replaceVar(baseModel.getTeardown(),varPath);
+                if (o instanceof CaseModel){
+                    CaseModel caseModel = (CaseModel) o;
+                    //处理requstmodel
+                    replaceVar(caseModel.getRequest(),varPath);
+                    //处理assert
+                    replaceVar(caseModel.getAsserts(),varPath);
+                }
+            } else if (o instanceof FixtureModel){
+                FixtureModel fixtureModel = (FixtureModel) o;
+                //fixture是个list
+                replaceVar(fixtureModel.getFixture(),varPath);
+            } else if (o instanceof RequestModel){
+                RequestModel requestModel = (RequestModel) o;
+                //解析urlmodel
+                replaceVar(requestModel.getUrlModel(),varPath);
+                //解析headers
+                replaceVar(requestModel.getHeaders(),varPath);
+                //解析body
+                replaceVar(requestModel.getBody(),varPath);
+            } else if (o instanceof UrlModel){
+                UrlModel urlModel = (UrlModel) o;
+                //解析params
+                replaceVar(urlModel.getParams(),varPath);
+                //解析path
+                replaceVar(urlModel.getPath(),varPath);
+            } else if (o instanceof SqlModel){
+              SqlModel sqlModel = (SqlModel) o;
+              //解析sql中变量
+              replaceVar(sqlModel.getSql(),varPath);
+            } else {
+                //数字类的不做处理
+            }
         }
     }
 
     /**
-     * 只考虑了map,基本值:暂时没有考虑list
-     * @param map
-     * @param varPath
+     * @param src 待替换的string
+     * @param varPath 当前变量所处的路径：project-module-api-case : 没有包含varname
+     * @return
      */
-    private void replcevar(Map map,String[] varPath){
-        for (Object keyMap : map.keySet()){
-            //替换map中的值
-            if (map.get(keyMap) instanceof String){
-                String value = (String) map.get(keyMap);
-                if (CommonUtil.getFirstString(value) != null){
-                    map.put(keyMap,getReplaceValue(varPath));
-                }
-            }
-            if (map.get(keyMap) instanceof Map){
-                replaceVar(map.get(keyMap),varPath);
+    private String getReplaceString(String src,String[] varPath){
+        while (true){
+            //s是需要替换掉的部分,s=${aaaa}
+            String s = CommonUtil.getFirstString(src);
+            if (s != null){
+                //varname 是待替换的变量名
+                String varName = s.substring(2,s.length()-1);
+                String[] realVarName = {varName};
+                String[] realVarPath = CommonUtil.mergeArray(varPath,realVarName);
+                src = src.replace(s, (String) getReplaceValue(realVarPath));
+            } else {
+                break;
             }
         }
+        return src;
     }
 
-    private void replacevar(FixtureModel fixtureModel, String[] varPath){
-
-    }
 
     /**
      * 获得请求数据中变量对应的值

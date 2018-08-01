@@ -9,15 +9,13 @@ import com.autoapi.parse.ParseBase;
 import com.autoapi.parse.ParseApiConfig.ParseDirecotory;
 import com.autoapi.util.CommonUtil;
 import com.autoapi.util.YamlUtil;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.beans.binding.ObjectExpression;
 import org.testng.annotations.Test;
 
 import java.net.URL;
 import java.text.Format;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Practice {
     @Test
@@ -93,8 +91,16 @@ public class Practice {
 
     @Test
     public void prac6() throws Exception {
-        String s = "abd{ss}{ff}";
-        System.out.println(CommonUtil.getFirstString(s));
+        List l = new ArrayList();
+        l.add("a");
+        l.add("b");
+        l.add("c");
+        l.add("a");
+        System.out.println(l);
+        System.out.println(l.indexOf("a"));
+        l.set(3,"d");
+        System.out.println(l);
+
     }
 
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.PractisMybatis">
+  <select id="selectOne" resultType="java.util.Map">
+    select
+      merchant_code partnerNumber,
+      sub_merchant_name merchantName
+    from
+      jufan_core.master_merchant_sub
+    where
+      id = #{id}
+  </select>
+  <select id="selects" resultType="java.util.Map">
+    SELECT id,PARTNER_NUMBER FROM jf_risk_control_test.bredit_apply limit 5;
+  </select>
+
+</mapper>

@@ -60,11 +60,13 @@ public class ParseFixture {
                             if (mapFromConfig.containsKey(CONN)){
                                 sqlModel.setConn((String) mapFromConfig.get(CONN));
                             }
-                            if (mapFromConfig.containsKey(RES)){
-                                sqlModel.setRes(RES);
+                            if (mapFromConfig.containsKey(PARAMS)){
+                                if (mapFromConfig.get(PARAMS) != null){
+                                    sqlModel.setParams((Map) mapFromConfig.get(PARAMS));
+                                }
                             }
-                            if (mapFromConfig.containsKey(RESLIST)){
-                                sqlModel.setResList(RESLIST);
+                            if (mapFromConfig.containsKey(OUTPUT)){
+                                sqlModel.setOutput((String) mapFromConfig.get(OUTPUT));
                             }
                             sqlResList.add(sqlModel);
                         }

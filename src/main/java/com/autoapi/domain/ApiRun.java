@@ -1,112 +1,31 @@
 package com.autoapi.domain;
 
-import com.autoapi.httprequest.HttpClientUtil;
 import com.autoapi.model.*;
-import com.autoapi.model.http.HttpClientRequest;
-import com.autoapi.model.http.HttpClientResponse;
 import com.autoapi.parse.ParseApiConfig.ParseApiConfig;
 import com.autoapi.parse.ParseApiConfig.ParseDirecotory;
 import com.autoapi.util.CommonUtil;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.ibatis.io.Resources;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 public class ApiRun {
-    private ApiConfig apiConfig;
+    //mybatis文件
+    private InputStream sqlInputStream;
+    //整个用例树
+    public static ApiConfig apiConfig;
+
 
     public ApiRun() throws Exception {
+        String resource = "mybatis/mabatis-config.xml";
+        sqlInputStream = Resources.getResourceAsStream(resource);
         ParseDirecotory parseDirecotory = new ParseDirecotory();
         ParseApiConfig apiConfig = new ParseApiConfig(parseDirecotory.getCasePath());
         this.apiConfig = apiConfig.getApiConfig();
-
     }
 
-    /**
-     *真正执行用例的方法
-     * @throws Exception
-     */
-    public void doRun() throws Exception {
-        Map<String,ProjectModel> projectModelMap = this.apiConfig.getProjects();
-        //project层
-        for (Object keyProject : projectModelMap.keySet()){
-            ProjectModel projectModel = projectModelMap.get(keyProject);
-            if (projectModel.isRun()){
-                //执行替换变量
-                String[] projectPath = {(String) keyProject};
-                replaceVar(projectModel,projectPath);
-                //执行setup
-                //FixtureModel projectSetup = projectModel.getSetup();
-                Map<String,ModuleModel> moduleModelMap = projectModel.getModules();
-                for (Object keyModule : moduleModelMap.keySet()){
-                    //module层
-                    ModuleModel moduleModel = moduleModelMap.get(keyModule);
-                    if (moduleModel.isRun()){
-                        //执行变量替换
-                        String[] modulePath = {(String) keyProject, (String) keyModule};
-                        replaceVar(moduleModel,modulePath);
-                        //执行setup
-                        //FixtureModel moduleSetup = moduleModel.getSetup();
-                        Map<String,ApiModel> apiModelMap = moduleModel.getApis();
-                        for (Object keyApi : apiModelMap.keySet()){
-                            //api层
-                            ApiModel apiModel = apiModelMap.get(keyApi);
-                            if (apiModel.isRun()){
-                                //执行变量替换
-                                String[] apiPath = {(String) keyProject, (String) keyModule, (String) keyApi,};
-                                replaceVar(apiModel,apiPath);
-                                //执行setup
-                                //FixtureModel apiSetup = apiModel.getSetup();
-                                Map<String,CaseModel> caseModelMap = apiModel.getCases();
-                                for (Object keyCase:caseModelMap.keySet()){
-                                    //case层
-                                    CaseModel caseModel = caseModelMap.get(keyCase);
-                                    if (caseModel.isRun()){
-                                        //执行变量替换
-                                        String[] casePath = {(String) keyProject, (String) keyModule, (String) keyApi, (String) keyCase};
-                                        replaceVar(caseModel,casePath);
-                                        //执行setup
-                                        //FixtureModel caseSetup = caseModel.getSetup();
 
-                                        //获取请求
-                                        HttpClientRequest request = getRequest(caseModel);
-                                        //执行请求,获得相应
-                                        HttpClientUtil clientUtil = new HttpClientUtil();
-                                        HttpClientResponse response = clientUtil.doRequest(request);
-                                        System.out.println(response);
-
-                                        //执行teardown
-                                        //FixtureModel caseTeardown = caseModel.getTeardown();
-
-                                        //执行完，给父节点执行计数+1
-                                        //apiModel.setSonHasRunNumber();
-                                    }
-
-                                }
-                                //执行teardown
-                                //FixtureModel apiTeardown = apiModel.getTeardown();
-                                //执行完，给父节点执行计数+1
-                                //moduleModel.setSonHasRunNumber();
-                            }
-
-                        }
-                        //执行tearDown
-                        //FixtureModel moduleTeardown = moduleModel.getTeardown();
-                        //执行完，给父节点执行计数+1
-                        //projectModel.setSonHasRunNumber();
-                    }
-
-                }
-                //执行teardown
-                //FixtureModel projectTeardown = projectModel.getTeardown();
-            }
-        }
-
-    }
 
     /**
      * 执行标记后的用例
@@ -181,61 +100,103 @@ public class ApiRun {
 
     }
 
-
-
-
     /**
-     * 将casemodel转化成HttpClientRequest，此时变量已替换完成
-     * @param caseModel
-     * @return
+     *真正执行用例的方法,由run()调用
+     * @throws Exception
      */
-    private HttpClientRequest getRequest(CaseModel caseModel) throws URISyntaxException {
-        HttpClientRequest request = new HttpClientRequest();
-        String url = getUrl(caseModel.getRequest().getUrlModel());
-        request.setMethod(caseModel.getRequest().getMethod());
-        request.setUrl(url);
-        request.setHeaders(caseModel.getRequest().getHeaders());
-        request.setBody(caseModel.getRequest().getBody());
-        return request;
-    }
+    private void doRun() throws Exception {
+        FixtureRun runFixture = new FixtureRun();
+        Map<String,ProjectModel> projectModelMap = this.apiConfig.getProjects();
+        //project层
+        for (Object keyProject : projectModelMap.keySet()){
+            ProjectModel projectModel = projectModelMap.get(keyProject);
+            if (projectModel.isRun()){
+                //执行替换变量
+                String[] projectPath = {(String) keyProject};
+                replaceVar(projectModel,projectPath);
+                //执行setup
+                FixtureModel projectSetup = projectModel.getSetup();
+                runFixture.runFixture(projectSetup,projectModel,sqlInputStream);
 
-    /**
-     * 将urlmodel解析成url
-     * @param urlModel
-     * @return
-     * @throws URISyntaxException
-     */
-    private String getUrl(UrlModel urlModel) throws URISyntaxException {
-        //拼接url
-        String schema = urlModel.getSchema();
-        String host = urlModel.getHost();
-        int port = urlModel.getPort();
-        String version = urlModel.getVersion();
-        String path = urlModel.getPath();
-        if (version != null){
-            path = version + "/" + path;
-        }
-        URIBuilder uriBuilder = new URIBuilder().setScheme(schema).setHost(host).setPort(port)
-                .setPath(path);
-        //组装params
-        Map params = urlModel.getParams();
-        if (params != null){
-            List<NameValuePair> pairList = new ArrayList<NameValuePair>();
-            for (Object k : params.keySet()){
-                NameValuePair pair = new BasicNameValuePair((String) k,(String) params.get(k));
-                pairList.add(pair);
+                Map<String,ModuleModel> moduleModelMap = projectModel.getModules();
+                for (Object keyModule : moduleModelMap.keySet()){
+                    //module层
+                    ModuleModel moduleModel = moduleModelMap.get(keyModule);
+                    if (moduleModel.isRun()){
+                        //执行变量替换
+                        String[] modulePath = {(String) keyProject, (String) keyModule};
+                        replaceVar(moduleModel,modulePath);
+                        //执行setup
+                        FixtureModel moduleSetup = moduleModel.getSetup();
+                        runFixture.runFixture(moduleSetup,moduleModel,sqlInputStream);
+
+                        Map<String,ApiModel> apiModelMap = moduleModel.getApis();
+                        for (Object keyApi : apiModelMap.keySet()){
+                            //api层
+                            ApiModel apiModel = apiModelMap.get(keyApi);
+                            if (apiModel.isRun()){
+                                //执行变量替换
+                                String[] apiPath = {(String) keyProject, (String) keyModule, (String) keyApi,};
+                                replaceVar(apiModel,apiPath);
+                                //执行setup
+                                FixtureModel apiSetup = apiModel.getSetup();
+                                runFixture.runFixture(apiSetup,apiModel,sqlInputStream);
+
+                                Map<String,CaseModel> caseModelMap = apiModel.getCases();
+                                for (Object keyCase:caseModelMap.keySet()){
+                                    //case层
+                                    CaseModel caseModel = caseModelMap.get(keyCase);
+                                    if (caseModel.isRun()){
+                                        //执行变量替换
+                                        String[] casePath = {(String) keyProject, (String) keyModule, (String) keyApi, (String) keyCase};
+                                        replaceVar(caseModel,casePath);
+                                        //执行setup
+                                        FixtureModel caseSetup = caseModel.getSetup();
+                                        runFixture.runFixture(caseSetup,caseModel,sqlInputStream);
+
+                                        //执行请求
+                                        RunUtil runUtil = new RunUtil();
+                                        //此处后一个basemodel不起作用
+                                        runUtil.runApi(caseModel,caseModel);
+
+                                        //执行teardown
+                                        FixtureModel caseTeardown = caseModel.getTeardown();
+                                        runFixture.runFixture(caseTeardown,caseModel,sqlInputStream);
+                                        //执行完，给父节点执行计数+1
+                                        //apiModel.setSonHasRunNumber();
+                                    }
+
+                                }
+                                //执行teardown
+                                FixtureModel apiTeardown = apiModel.getTeardown();
+                                runFixture.runFixture(apiTeardown,apiModel,sqlInputStream);
+                                //执行完，给父节点执行计数+1
+                                //moduleModel.setSonHasRunNumber();
+                            }
+
+                        }
+                        //执行tearDown
+                        FixtureModel moduleTeardown = moduleModel.getTeardown();
+                        runFixture.runFixture(moduleTeardown,moduleModel,sqlInputStream);
+                        //执行完，给父节点执行计数+1
+                        //projectModel.setSonHasRunNumber();
+                    }
+
+                }
+                //执行teardown
+                FixtureModel projectTeardown = projectModel.getTeardown();
+                runFixture.runFixture(projectTeardown,projectModel,sqlInputStream);
             }
-            uriBuilder.setParameters(pairList);
         }
 
-        String url = uriBuilder.build().toString();
-        return url;
     }
+
+
 
     /**
      *
-     * @param o
-     * @param varPath
+     * @param o 需要替换的对象
+     * @param varPath 当前变量的路径
      */
     private void replaceVar(Object o,String[] varPath){
         if (o != null){
@@ -365,4 +326,5 @@ public class ApiRun {
         }
         return res;
     }
+
 }

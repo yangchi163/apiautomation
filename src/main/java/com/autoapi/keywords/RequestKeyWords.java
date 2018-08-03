@@ -9,7 +9,7 @@ public class RequestKeyWords {
     public static final String METHOD = "method";
     public static final String HEADERS = "headers";
     public static final String BODY = "data";                     //为了兼容当前的配置文件
-    public static final String PARAMS = "params";
+    public static final String PARAMS = "params";                 //url中，sql中
     public static final String BASE = "base";
     public static final String API = "api";
     public static final String PATH = "path";

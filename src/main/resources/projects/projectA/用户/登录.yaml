@@ -1,16 +1,80 @@
-
+#变量
 var:
-    valid: 15000000000
-    invalid: 150000000
-
+    key: value
+#前处理：（有执行顺序）
 setup:
-
+  -
+    #sql模块
+    sql:
+      -
+        #sql的name---keywords.Dosql.function---mybatis.sql.xml.id
+          sql: selects
+        #sql的参数----keywords.Dosql.function的入参
+        params:
+            a: s
+            b: ss
+        #选择要连接的数据库
+        conn: ss
+        #sql执行结果要保存在“当前节点.var.varName”中,如果没有此节点，则只执行sql,不保存结果
+        output: varName
+        # 注: 结果是map,还是list<map>,由keywords.Dosql.function的返回类型决定
+      -
+        sql: hhe
+        conn: sss
+  -
+    #api模块
+    api:
+      -
+        #项目名.模块名.用例名: 指定调用哪个接口
+        projectA.用户.登录:
+            #变量
+            var:
+                key: value
+            #替换请求体body中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+            data:
+                key2: value2
+            #替换请求头中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+            headers:
+                h: v
+            #替换请求url中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+            params:
+                key3: value3
+            #api执行返回的response，保存在当前节点.var.varName中，var中没有则增加，有则覆盖
+            output: varName
+  -
+    #sql模块
+    sql:
+      -
+        #sql的name---keywords.Dosql.function---mybatis.sql.xml.id
+          sql: selects
+        #sql的参数----keywords.Dosql.function的入参
+        params:
+            a: s
+            b: ss
+        #选择要连接的数据库
+        conn: ss
+        #sql执行结果要保存在“当前节点.var.varName”中,如果没有此节点，则只执行sql,不保存结果
+        output: varName
+        # 注: 结果是map,还是list<map>,由keywords.Dosql.function的返回类型决定
 
 teardown:
 
 
 test-case:
     合法手机号:
+      #变量
+      var:
+          key: value
+      #替换请求体body中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
       data:
-        accountName: "15021415241"
-        password: "123456"
+          key2: value2
+      #替换请求头中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+      headers:
+          h: v
+      #替换请求url中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+      params:
+          key3: value3
+      #api执行返回的response，保存在当前节点.var.varName中，var中没有则增加，有则覆盖
+      output: varName
+      setup:
+      teardown:

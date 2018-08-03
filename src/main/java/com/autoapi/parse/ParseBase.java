@@ -12,7 +12,7 @@ import static com.autoapi.keywords.RequestKeyWords.*;
  * 解析api.yaml
  */
 public class ParseBase {
-    private RequestBaseModel baseModel = new RequestBaseModel();
+    private RequestModel baseModel = new RequestModel("");
     private Map api ;
     private String filePath;
 

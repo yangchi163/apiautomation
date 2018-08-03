@@ -4,15 +4,14 @@ import java.util.Map;
 
 public class RequestModel {
     private String name;
-
-    public RequestModel(String name) {
-        this.name = name;
-    }
-
     private UrlModel urlModel;
     private String method = "";
     private Map<String,String> headers;
     private Map body;
+
+    public RequestModel(String name) {
+        this.name = name;
+    }
 
     public UrlModel getUrlModel() {
         return urlModel;

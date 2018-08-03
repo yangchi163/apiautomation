@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="mastedata">
+        <environment id="mastedata">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://t.jufandev.com:30622/jufan"/>
+                <property name="username" value="root"/>
+                <property name="password" value="We-are-hero-2015"/>
+            </dataSource>
+        </environment>
+        <environment id="xinshen">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://t.jufandev.com:30621/jf_risk_control_test"/>
+                <property name="username" value="root"/>
+                <property name="password" value="We-are-hero-2015"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="merchantMapper.xml"/>
+    </mappers>
+</configuration>

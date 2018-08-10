@@ -1,5 +1,6 @@
 package com.autoapi.domain;
 
+import com.autoapi.domain.asserts.AssertsRun;
 import com.autoapi.model.*;
 import com.autoapi.parse.ParseApiConfig.ParseApiConfig;
 import com.autoapi.parse.ParseApiConfig.ParseDirecotory;
@@ -34,7 +35,6 @@ public class ApiRun {
      */
     public void run(String... casePath) throws Exception {
         collectCase(casePath);
-        System.out.println(this.apiConfig);
         doRun();
     }
 
@@ -111,81 +111,118 @@ public class ApiRun {
         for (Object keyProject : projectModelMap.keySet()){
             ProjectModel projectModel = projectModelMap.get(keyProject);
             if (projectModel.isRun()){
-                //执行替换变量
-                String[] projectPath = {(String) keyProject};
-                replaceVar(projectModel,projectPath);
-                //执行setup
-                FixtureModel projectSetup = projectModel.getSetup();
-                runFixture.runFixture(projectSetup,projectModel,sqlInputStream);
+                try {
+                    //执行替换变量
+                    String[] projectPath = {(String) keyProject};
+                    replaceVar(projectModel,projectPath);
+                    //执行setup
+                    FixtureModel projectSetup = projectModel.getSetup();
+                    runFixture.runFixture(projectSetup,projectModel,sqlInputStream);
+                    //执行fixture后，会产生新的变量,执行变量替换
+                    replaceVar(projectModel,projectPath);
 
-                Map<String,ModuleModel> moduleModelMap = projectModel.getModules();
-                for (Object keyModule : moduleModelMap.keySet()){
-                    //module层
-                    ModuleModel moduleModel = moduleModelMap.get(keyModule);
-                    if (moduleModel.isRun()){
-                        //执行变量替换
-                        String[] modulePath = {(String) keyProject, (String) keyModule};
-                        replaceVar(moduleModel,modulePath);
-                        //执行setup
-                        FixtureModel moduleSetup = moduleModel.getSetup();
-                        runFixture.runFixture(moduleSetup,moduleModel,sqlInputStream);
-
-                        Map<String,ApiModel> apiModelMap = moduleModel.getApis();
-                        for (Object keyApi : apiModelMap.keySet()){
-                            //api层
-                            ApiModel apiModel = apiModelMap.get(keyApi);
-                            if (apiModel.isRun()){
+                    Map<String,ModuleModel> moduleModelMap = projectModel.getModules();
+                    for (Object keyModule : moduleModelMap.keySet()){
+                        //module层
+                        ModuleModel moduleModel = moduleModelMap.get(keyModule);
+                        if (moduleModel.isRun()){
+                            try {
                                 //执行变量替换
-                                String[] apiPath = {(String) keyProject, (String) keyModule, (String) keyApi,};
-                                replaceVar(apiModel,apiPath);
+                                String[] modulePath = {(String) keyProject, (String) keyModule};
+                                replaceVar(moduleModel,modulePath);
                                 //执行setup
-                                FixtureModel apiSetup = apiModel.getSetup();
-                                runFixture.runFixture(apiSetup,apiModel,sqlInputStream);
+                                FixtureModel moduleSetup = moduleModel.getSetup();
+                                runFixture.runFixture(moduleSetup,moduleModel,sqlInputStream);
+                                //执行fixture后，会产生新的变量,执行变量替换
+                                replaceVar(moduleModel,modulePath);
 
-                                Map<String,CaseModel> caseModelMap = apiModel.getCases();
-                                for (Object keyCase:caseModelMap.keySet()){
-                                    //case层
-                                    CaseModel caseModel = caseModelMap.get(keyCase);
-                                    if (caseModel.isRun()){
-                                        //执行变量替换
-                                        String[] casePath = {(String) keyProject, (String) keyModule, (String) keyApi, (String) keyCase};
-                                        replaceVar(caseModel,casePath);
-                                        //执行setup
-                                        FixtureModel caseSetup = caseModel.getSetup();
-                                        runFixture.runFixture(caseSetup,caseModel,sqlInputStream);
+                                Map<String,ApiModel> apiModelMap = moduleModel.getApis();
+                                for (Object keyApi : apiModelMap.keySet()){
+                                    //api层
+                                    ApiModel apiModel = apiModelMap.get(keyApi);
+                                    if (apiModel.isRun()){
+                                        try {
+                                            //执行变量替换
+                                            String[] apiPath = {(String) keyProject, (String) keyModule, (String) keyApi,};
+                                            replaceVar(apiModel,apiPath);
+                                            //执行setup
+                                            FixtureModel apiSetup = apiModel.getSetup();
+                                            runFixture.runFixture(apiSetup,apiModel,sqlInputStream);
+                                            //执行fixture后，会产生新的变量,执行变量替换
+                                            replaceVar(apiModel,apiPath);
 
-                                        //执行请求
-                                        RunUtil runUtil = new RunUtil();
-                                        //此处后一个basemodel不起作用
-                                        runUtil.runApi(caseModel,caseModel);
+                                            Map<String,CaseModel> caseModelMap = apiModel.getCases();
+                                            for (Object keyCase:caseModelMap.keySet()){
+                                                //case层
+                                                CaseModel caseModel = caseModelMap.get(keyCase);
+                                                if (caseModel.isRun()){
+                                                    try {
+                                                        //执行变量替换
+                                                        String[] casePath = {(String) keyProject, (String) keyModule, (String) keyApi, (String) keyCase};
+                                                        replaceVar(caseModel,casePath);
+                                                        //执行setup
+                                                        FixtureModel caseSetup = caseModel.getSetup();
+                                                        runFixture.runFixture(caseSetup,caseModel,sqlInputStream);
+                                                        //执行fixture后，会产生新的变量,执行变量替换
+                                                        replaceVar(caseModel,casePath);
+                                                        //执行请求
+                                                        RunUtil runUtil = new RunUtil();
+                                                        //此处后一个basemodel不起作用
+                                                        runUtil.runApi(caseModel,caseModel);
 
-                                        //执行teardown
-                                        FixtureModel caseTeardown = caseModel.getTeardown();
-                                        runFixture.runFixture(caseTeardown,caseModel,sqlInputStream);
-                                        //执行完，给父节点执行计数+1
-                                        //apiModel.setSonHasRunNumber();
+                                                        //执行断言
+                                                        AssertsRun assertsRun = new AssertsRun();
+                                                        assert assertsRun.runAsserts(caseModel.getAsserts(),caseModel,sqlInputStream);
+
+
+                                                    }catch (Throwable e){
+                                                        e.printStackTrace();
+                                                    }finally {
+                                                        //执行teardown
+                                                        FixtureModel caseTeardown = caseModel.getTeardown();
+                                                        runFixture.runFixture(caseTeardown,caseModel,sqlInputStream);
+                                                        //执行完，给父节点执行计数+1
+                                                        //apiModel.setSonHasRunNumber();
+                                                    }
+
+                                                }
+
+                                            }
+
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        } finally {
+                                            //执行teardown
+                                            FixtureModel apiTeardown = apiModel.getTeardown();
+                                            runFixture.runFixture(apiTeardown,apiModel,sqlInputStream);
+                                            //执行完，给父节点执行计数+1
+                                            //moduleModel.setSonHasRunNumber();
+                                        }
+
                                     }
 
                                 }
-                                //执行teardown
-                                FixtureModel apiTeardown = apiModel.getTeardown();
-                                runFixture.runFixture(apiTeardown,apiModel,sqlInputStream);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }finally {
+                                //执行tearDown
+                                FixtureModel moduleTeardown = moduleModel.getTeardown();
+                                runFixture.runFixture(moduleTeardown,moduleModel,sqlInputStream);
                                 //执行完，给父节点执行计数+1
-                                //moduleModel.setSonHasRunNumber();
+                                //projectModel.setSonHasRunNumber();
                             }
 
                         }
-                        //执行tearDown
-                        FixtureModel moduleTeardown = moduleModel.getTeardown();
-                        runFixture.runFixture(moduleTeardown,moduleModel,sqlInputStream);
-                        //执行完，给父节点执行计数+1
-                        //projectModel.setSonHasRunNumber();
-                    }
 
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }finally {
+                    //执行teardown
+                    FixtureModel projectTeardown = projectModel.getTeardown();
+                    runFixture.runFixture(projectTeardown,projectModel,sqlInputStream);
                 }
-                //执行teardown
-                FixtureModel projectTeardown = projectModel.getTeardown();
-                runFixture.runFixture(projectTeardown,projectModel,sqlInputStream);
+
             }
         }
 
@@ -257,8 +294,8 @@ public class ApiRun {
                 replaceVar(urlModel.getPath(),varPath);
             } else if (o instanceof SqlModel){
               SqlModel sqlModel = (SqlModel) o;
-              //解析sql中变量
-              replaceVar(sqlModel.getSql(),varPath);
+              //解析sql中参数变量
+              replaceVar(sqlModel.getParams(),varPath);
             } else {
                 //数字类的不做处理
             }
@@ -271,15 +308,22 @@ public class ApiRun {
      * @return
      */
     private String getReplaceString(String src,String[] varPath){
+        int beginIndex = 0;
         while (true){
             //s是需要替换掉的部分,s=${aaaa}
-            String s = CommonUtil.getFirstString(src);
+            String s = CommonUtil.getFirstString(src,beginIndex);
             if (s != null){
                 //varname 是待替换的变量名
                 String varName = s.substring(2,s.length()-1);
                 String[] realVarName = {varName};
                 String[] realVarPath = CommonUtil.mergeArray(varPath,realVarName);
-                src = src.replace(s, (String) getReplaceValue(realVarPath));
+                Object strForReplace = getReplaceValue(realVarPath);
+                //防止var中拿到的值是null，就不替换,不是null才替换
+                if (strForReplace != null){
+                    src = src.replace(s, (String)strForReplace);
+                }
+                //计算下一个需替换值的位置
+                beginIndex = src.indexOf(s) + s.length();
             } else {
                 break;
             }
@@ -308,19 +352,19 @@ public class ApiRun {
         }
         if (varPath.length > 2){
             moduleModel = projectModel.getModules().get(varPath[1]);
-            if (projectModel.getVar().containsKey(varName)){
+            if (moduleModel.getVar().containsKey(varName)){
                 res = moduleModel.getVar().get(varName);
             }
         }
         if (varPath.length > 3){
             apiModel = moduleModel.getApis().get(varPath[2]);
-            if (projectModel.getVar().containsKey(varName)){
+            if (apiModel.getVar().containsKey(varName)){
                 res = apiModel.getVar().get(varName);
             }
         }
         if (varPath.length > 4){
             caseModel = apiModel.getCases().get(varPath[3]);
-            if (projectModel.getVar().containsKey(varName)){
+            if (caseModel.getVar().containsKey(varName)){
                 res = caseModel.getVar().get(varName);
             }
         }

@@ -2,28 +2,22 @@ package com.autoapi.model;
 
 import java.util.Map;
 
-public class SqlModel {
-    //返回的结果是什么由dosql的返回类型确定
-    private String sqlName;
-    private String conn;
-    //params 只能是单层map,不能嵌套
+public class FunctionModel {
+    //只在fixture里有
+    private String functionName;
+    //接受到的是linkedhashmap，参数是有序的
     private Map params;
     private String output;
 
-    public String getSqlName() {
-        return sqlName;
+    public FunctionModel() {
     }
 
-    public void setSqlName(String sqlName) {
-        this.sqlName = sqlName;
+    public String getFunctionName() {
+        return functionName;
     }
 
-    public String getConn() {
-        return conn;
-    }
-
-    public void setConn(String conn) {
-        this.conn = conn;
+    public void setFunctionName(String functionName) {
+        this.functionName = functionName;
     }
 
     public Map getParams() {
@@ -44,9 +38,8 @@ public class SqlModel {
 
     @Override
     public String toString() {
-        return "SqlModel{" +
-                "sqlName='" + sqlName + '\'' +
-                ", conn='" + conn + '\'' +
+        return "FunctionModel{" +
+                "functionName='" + functionName + '\'' +
                 ", params=" + params +
                 ", output='" + output + '\'' +
                 '}';

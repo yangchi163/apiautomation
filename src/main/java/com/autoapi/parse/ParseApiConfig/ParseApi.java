@@ -46,13 +46,20 @@ public class ParseApi {
         return apiModel;
     }
 
+    /**
+     *
+     * @param apiPath api文件全路径
+     * @throws Exception
+     */
     private void parseCase(String apiPath) throws Exception {
         setApiBaseModel();
         Map map = YamlUtil.read(apiPath);
         //解析api级var
         if (map.containsKey(VAR)){
-             Map vars_temp= (Map) map.get(VAR);
-                 apiModel.setVar(vars_temp);
+            if (map.get(VAR) != null){
+                Map vars_temp= (Map) map.get(VAR);
+                apiModel.setVar(vars_temp);
+            }
         }
         //解析test-case:params,headers,body,var:替换的变量
         if (map.containsKey(TESTCASE)){

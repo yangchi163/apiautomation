@@ -1,9 +1,13 @@
 package com.autoapi.model;
 
+import com.autoapi.model.asserts.AssertModel;
+
+import java.util.List;
+
 public class CaseModel extends BaseModel{
     private RequestModel request = new RequestModel("");
     private String output;
-    private AssertModel asserts;
+    private List<AssertModel> asserts;
 
     public CaseModel(String name) {
         this.name = name;
@@ -17,20 +21,20 @@ public class CaseModel extends BaseModel{
         this.request = request;
     }
 
-    public AssertModel getAsserts() {
-        return asserts;
-    }
-
-    public void setAsserts(AssertModel asserts) {
-        this.asserts = asserts;
-    }
-
     public String getOutput() {
         return output;
     }
 
     public void setOutput(String output) {
         this.output = output;
+    }
+
+    public List<AssertModel> getAsserts() {
+        return asserts;
+    }
+
+    public void setAsserts(List<AssertModel> asserts) {
+        this.asserts = asserts;
     }
 
     @Override

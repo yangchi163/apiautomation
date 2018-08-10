@@ -14,8 +14,9 @@ public class YamlUtil {
         try {
             inputStream = new FileInputStream(file);
             map = yaml.load(inputStream);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(filePath);
         }finally {
             try {
                 inputStream.close();

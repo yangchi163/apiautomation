@@ -29,6 +29,11 @@ public class ParseApiConfig {
         this.fileList = fileList;
     }
 
+    /**
+     *
+     * @param fileList 根据配置文件的目录结构，生成测试用例的目录结构，由ParseDirecotory.getCasePath（）生成
+     * @throws Exception
+     */
     private void parseApiConfig(List<String[]> fileList) throws Exception {
         Map<String,ProjectModel> projects = apiConfig.getProjects();
         String projectPath = null;
@@ -81,7 +86,6 @@ public class ParseApiConfig {
                     //单独处理module.yaml
                     parseOtherConfig(projects.get(projectPath).getModules().get(modulePath),filePath);
                 } else {
-
                     if (apiPath != null && !apis.containsKey(apiPath)){
                         ParseApi parseApi = new ParseApi(filePath);
                         apis.put(apiPath,parseApi.getApiModel());
@@ -97,8 +101,8 @@ public class ParseApiConfig {
 
     /**
      * 解析project.yaml,module.yaml……中的var,setup,teardown,api级和case级的var放在parseApi中解析
-     * @param baseModel
-     * @param configPath
+     * @param baseModel 当前节点对象
+     * @param configPath 当前节点的路径
      */
     private void parseOtherConfig(BaseModel baseModel,String[] configPath) throws Exception {
         String filePath = FileKeyWords.CASEBASEPATH;
@@ -107,18 +111,26 @@ public class ParseApiConfig {
         }
         //组装var
         Map mapFromConfig = YamlUtil.read(filePath + ".yaml");
-        if (mapFromConfig.containsKey(VAR)){
-            baseModel.setVar((Map) mapFromConfig.get(VAR));
-        }
-        //setup
-        if (mapFromConfig.containsKey(SETUP)){
-            ParseFixture parseFixture = new ParseFixture();
-            baseModel.setSetup(parseFixture.getFixtureModel(mapFromConfig,SETUP));
-        }
-        //teardown
-        if (mapFromConfig.containsKey(TEARDOWN)){
-            ParseFixture parseFixture = new ParseFixture();
-            baseModel.setSetup(parseFixture.getFixtureModel(mapFromConfig,TEARDOWN));
+        if (mapFromConfig != null){
+            if (mapFromConfig.containsKey(VAR)){
+                if (mapFromConfig.get(VAR) != null){
+                    baseModel.setVar((Map) mapFromConfig.get(VAR));
+                }
+            }
+            //setup
+            if (mapFromConfig.containsKey(SETUP)){
+                if (mapFromConfig.get(SETUP) != null){
+                    ParseFixture parseFixture = new ParseFixture();
+                    baseModel.setSetup(parseFixture.getFixtureModel(mapFromConfig,SETUP));
+                }
+            }
+            //teardown
+            if (mapFromConfig.containsKey(TEARDOWN)){
+                if (mapFromConfig.get(TEARDOWN) != null){
+                    ParseFixture parseFixture = new ParseFixture();
+                    baseModel.setSetup(parseFixture.getFixtureModel(mapFromConfig,TEARDOWN));
+                }
+            }
         }
 
     }

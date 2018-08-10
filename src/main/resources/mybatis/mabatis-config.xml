@@ -24,6 +24,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="merchantMapper.xml"/>
+        <mapper resource="mybatis/sql.xml"/>
     </mappers>
 </configuration>

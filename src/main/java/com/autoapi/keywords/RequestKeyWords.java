@@ -15,10 +15,16 @@ public class RequestKeyWords {
     public static final String PATH = "path";
     public static final String VAR = "var";
     public static final String TESTCASE = "test-case";
+    //断言模块
+    public static final String ASSERTS = "asserts";
+    public static final String JSON = "json";
+    public static final String EXPECT = "expexct";
+    public static final String ACTUAL = "actual";
     //fixture模块key
     public static final String SETUP = "setup";
     public static final String TEARDOWN = "teardown";
     public static final String SQL = "sql";
+    public static final String FUNCTION = "function";
     public static final String CONN = "conn";
     public static final String RES = "res";
     public static final String RESLIST = "resList";
@@ -29,4 +35,7 @@ public class RequestKeyWords {
     public static final String DELETE = "delete";
     public static final String POST = "post";
     public static final String GET = "get";
+    //var中的保留变量
+    public static final String REQUEST = "request";
+    public static final String RESPONSE = "response";
 }

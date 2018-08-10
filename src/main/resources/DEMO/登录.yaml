@@ -1,0 +1,37 @@
+#变量
+#var:
+#    key: value
+##前处理：（有执行顺序）
+#setup:
+
+#test-case:
+#    合法手机号:
+#      #变量
+#      var:
+#          key: value
+#      #替换请求体body中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+#      data:
+#          key2: value2
+#      #替换请求头中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+#      headers:
+#          h: v
+#      #替换请求url中的值，（api.yaml中有的key,会替换值；没有的key,会增加）
+#      params:
+#          key3: value3
+#      #api执行返回的response，保存在当前节点.var.varName中，var中没有则增加，有则覆盖
+#      output: varName
+#      setup:
+#      teardown:
+#      asserts:
+#         -
+#             expexct:
+#                  json:
+#                  response:
+#                  sql:
+#             actual:
+#                 json:
+#                 response:
+#                 sql:
+#         -
+#             expexct:
+#             actual:

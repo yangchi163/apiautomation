@@ -1,7 +1,7 @@
 package com.autoapi.util;
 
-import com.autoapi.model.BaseModel;
-import com.autoapi.model.FixtureModel;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.ReadContext;
 
 import java.util.Map;
 
@@ -30,16 +30,18 @@ public class CommonUtil {
      * @return
      */
     public static Map mergeMap(Map a,Map b){
-        for (Object key : b.keySet()){
-            //a map中不包含key,直接添加
-            if (!a.containsKey(key)){
-                a.put(key,b.get(key));
-            } else {
-            //a map 中包含key时，且对象不是map时，直接添加;是map时,只替换map中的值，不是替换整个map
-                if (!(b.get(key) instanceof Map)){
+        if (b != null){
+            for (Object key : b.keySet()){
+                //a map中不包含key,直接添加
+                if (!a.containsKey(key)){
                     a.put(key,b.get(key));
                 } else {
-                    mergeMap((Map) a.get(key),(Map) b.get(key));
+                    //a map 中包含key时，且对象不是map时，直接添加;是map时,只替换map中的值，不是替换整个map
+                    if (!(b.get(key) instanceof Map)){
+                        a.put(key,b.get(key));
+                    } else {
+                        mergeMap((Map) a.get(key),(Map) b.get(key));
+                    }
                 }
             }
         }
@@ -53,14 +55,15 @@ public class CommonUtil {
      * @param s
      * @return
      */
-    public static String getFirstString(String s){
-        int start = s.indexOf("${");
+    public static String getFirstString(String s,int beginIndex){
+        int start = s.indexOf("${",beginIndex);
         int end = s.indexOf("}",start);
         if (start == -1 || end == -1){
             return null;
         }
         return s.substring(start,end+1);
     }
+
 
     /**
      * 合并2个数组，有顺序，a中元素在前
@@ -77,6 +80,18 @@ public class CommonUtil {
             res[a.length + j] = b[j];
         }
         return res;
+    }
+
+    /**
+     * 根据路径从json中返回对应值
+     * @param jsonString json字符串
+     * @param jsonpath json路径
+     * @return
+     */
+    public static Object getFromJsonByjsonPath(String jsonString,String jsonpath){
+        ReadContext context = JsonPath.parse(jsonString);
+        Object o = context.read(jsonpath);
+        return o;
     }
 
 

@@ -1,13 +1,9 @@
 package com.autoapi.domain;
 
-import com.autoapi.model.BaseModel;
-import com.autoapi.model.CaseModel;
-import com.autoapi.model.FixtureModel;
-import com.autoapi.model.SqlModel;
+import com.autoapi.model.*;
+
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
-import static com.autoapi.keywords.RequestKeyWords.*;
 
 public class FixtureRun {
 
@@ -25,24 +21,18 @@ public class FixtureRun {
         if (fixtureModel != null){
             RunUtil runUtil = new RunUtil();
             List fixtureList = fixtureModel.getFixture();
-            for (Object fixture:fixtureList){
-                //fixture是map
-                Map fixtureMap = (Map) fixture;
-                if (fixtureMap.containsKey(SQL)){
-                    List sqlModelList = (List) fixtureMap.get(SQL);
-                    for (Object o:sqlModelList){
-                        SqlModel sqlModel = (SqlModel) o;
-                        runUtil.runSql(inputStream,sqlModel,baseModel);
-                    }
+            for (Object fixture: fixtureList){
+                if (fixture instanceof SqlModel){
+                    runUtil.runSql(inputStream, (SqlModel) fixture,baseModel);
                 }
-                if (fixtureMap.containsKey(API)){
-                    List caseModelList = (List) fixtureMap.get(API);
-                    for (Object o : caseModelList){
-                        CaseModel caseModel = (CaseModel) o;
-                        runUtil.runApi(caseModel,baseModel);
-                    }
+                if (fixture instanceof FunctionModel){
+                    runUtil.runFunction((FunctionModel) fixture,baseModel);
+                }
+                if (fixture instanceof CaseModel){
+                    runUtil.runApi((CaseModel) fixture,baseModel);
                 }
             }
+
         }
     }
 

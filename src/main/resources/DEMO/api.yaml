@@ -1,0 +1,51 @@
+## id: 222               数字直接传
+## id: "222"             将数字转化成字符,加""
+## name: hello           字符直接传
+## name: ${name}         ${name}是变量,会去匹配对应值,匹配顺序为：case-api-model-project
+#
+##基础节点，必须有
+#base:
+#    #基础节点，必须有(schema,host,port,version,method都必须有)
+#    url:
+#        schema: http
+#        host: t.jufandev.com
+#        port: 33084
+#        version:
+#        method: GET
+#    headers:
+#        Content-Type: application/json;charset=UTF-8
+#        terminal: MOBILE
+#        type: ANDROID
+#        pushId: als266
+#        merchant-portal-token: ${token}
+##基础节点，必须有
+#api:
+#    #模块，对应文件夹名"用户"
+#    用户:
+#        #api名，对应文件名"登录.yaml"
+#        登录:
+#            #会覆盖base中的method
+#            method: post
+#            #拼接在url后面
+#            path: /mp/user/login/password
+#            #url后的筛选参数 “？key=value”
+#            params:
+#                key: value
+#            #post等请求的body部分
+#            data:
+#                accountName: "16666666662"
+#                password: qqq123
+#            #头部信息，与base中的headers叠加，相同则覆盖
+#            headers:
+#                key: value
+#
+#    moduleB:
+#
+#        获取用户类型:
+#            method: put
+#            url: /mp/user/roleType
+#
+#        获取平台列表:
+#            url:  /mp/common/merchant/list/MERCHANT_NAME_ID
+
+

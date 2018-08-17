@@ -5,7 +5,7 @@ import java.util.Map;
 public class HttpClientResponse {
     private String statusCode;
     private Map<String,String> headers;
-    private String body;
+    private Object body;
 
     public String getStatusCode() {
         return statusCode;
@@ -23,11 +23,11 @@ public class HttpClientResponse {
         this.headers = headers;
     }
 
-    public String getBody() {
+    public Object getBody() {
         return body;
     }
 
-    public void setBody(String body) {
+    public void setBody(Object body) {
         this.body = body;
     }
 
@@ -36,7 +36,7 @@ public class HttpClientResponse {
         return "HttpClientResponse{" +
                 "statusCode='" + statusCode + '\'' +
                 ", headers=" + headers +
-                ", body='" + body + '\'' +
+                ", body=" + body +
                 '}';
     }
 }

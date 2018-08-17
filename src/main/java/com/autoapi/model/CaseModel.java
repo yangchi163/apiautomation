@@ -6,6 +6,7 @@ import java.util.List;
 
 public class CaseModel extends BaseModel{
     private RequestModel request = new RequestModel("");
+    private boolean result;
     private String output;
     private List<AssertModel> asserts;
 
@@ -19,6 +20,14 @@ public class CaseModel extends BaseModel{
 
     public void setRequest(RequestModel request) {
         this.request = request;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
     }
 
     public String getOutput() {
@@ -41,6 +50,7 @@ public class CaseModel extends BaseModel{
     public String toString() {
         return "CaseModel{" +
                 "request=" + request +
+                ", result=" + result +
                 ", output='" + output + '\'' +
                 ", asserts=" + asserts +
                 ", name='" + name + '\'' +

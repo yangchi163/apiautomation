@@ -1,6 +1,7 @@
 package com.autoapi.domain.asserts;
 
 import com.autoapi.domain.RunUtil;
+import com.autoapi.model.ApiConfig;
 import com.autoapi.model.BaseModel;
 import com.autoapi.model.SqlModel;
 import com.autoapi.model.asserts.AssertModel;
@@ -9,6 +10,7 @@ import com.autoapi.model.asserts.ResponseModel;
 import com.autoapi.model.http.HttpClientResponse;
 import com.autoapi.util.CommonUtil;
 import com.google.gson.Gson;
+
 import static com.autoapi.keywords.RequestKeyWords.*;
 
 import java.io.InputStream;
@@ -24,32 +26,19 @@ public class AssertsRun {
      * @param inputStream
      * @return
      */
-    public boolean runAsserts(List<AssertModel> assertModels,BaseModel baseModel,InputStream inputStream){
+    public boolean runAsserts(List<AssertModel> assertModels,BaseModel baseModel,InputStream inputStream,
+                              ApiConfig apiConfig,String[] varpath){
         if (assertModels == null){
             return true;
         }
         for (AssertModel assertModel:assertModels){
-            Object actual = getAssertNodeResult(assertModel.getActual(),baseModel,inputStream);
-            Object expect = getAssertNodeResult(assertModel.getExpect(),baseModel,inputStream);
+            Object actual = getAssertNodeResult(assertModel.getActual(),baseModel,inputStream,apiConfig,varpath);
+            Object expect = getAssertNodeResult(assertModel.getExpect(),baseModel,inputStream,apiConfig,varpath);
             if(compare(actual,expect) == false){
                 return false;
             }
         }
         return true;
-    }
-
-    /**
-     * 判断一组验证
-     * @param assertModel
-     * @param baseModel
-     * @param inputStream
-     * @return
-     */
-    private boolean runAssert(AssertModel assertModel,BaseModel baseModel,InputStream inputStream){
-        Object actual = getAssertNodeResult(assertModel.getActual(),baseModel,inputStream);
-        Object expect = getAssertNodeResult(assertModel.getExpect(),baseModel,inputStream);
-        //比较actual,expect是否相同
-        return compare(actual,expect);
     }
 
     /**
@@ -59,7 +48,8 @@ public class AssertsRun {
      * @param inputStream
      * @return
      */
-    private Object getAssertNodeResult(AssertNodeModel assertNodeModel, BaseModel baseModel, InputStream inputStream){
+    private Object getAssertNodeResult(AssertNodeModel assertNodeModel, BaseModel baseModel, InputStream inputStream,
+                                       ApiConfig apiConfig, String[] varpath){
         Object res = null;
         Object assertNode = assertNodeModel.getAssertNode();
         if (assertNode instanceof Map){
@@ -69,8 +59,8 @@ public class AssertsRun {
             res = getResponseNode((HttpClientResponse) baseModel.getVar().get(RESPONSE),(ResponseModel) assertNode);
         }
         if (assertNode instanceof SqlModel){
-            RunUtil runUtil = new RunUtil();
-            res = runUtil.runSql(inputStream, (SqlModel) assertNode,baseModel);
+            RunUtil runUtil = new RunUtil(apiConfig);
+            res = runUtil.runSql(inputStream, (SqlModel) assertNode,baseModel,varpath);
         }
         return res;
     }
@@ -112,12 +102,12 @@ public class AssertsRun {
     }
 
     /**
-     * 验证expect中的 k-v 在actual中都存在
+     * 验证expect中的 k-v 在actual中都存在（expect内容较少）
      * @param actual
      * @param expect
      * @return
      */
-    private boolean compareMap(Map actual,Map expect){
+    public boolean compareMap(Map actual,Map expect){
         for (Object keyExpect:expect.keySet()){
             if (!actual.containsKey(keyExpect)){
                 return false;
@@ -140,7 +130,7 @@ public class AssertsRun {
      * @param expect
      * @return
      */
-    private boolean compareList(List<Map> actual,List<Map> expect){
+    public boolean compareList(List<Map> actual,List<Map> expect){
         //验证size
         if (actual.size() != expect.size()){
             return false;
@@ -149,8 +139,9 @@ public class AssertsRun {
         for (Map mapExpect:expect){
             boolean flag = false;
             for (Map mapActual:actual){
-                //一旦找到匹配的map,将flag变成true,跳出本次循环
+                //一旦找到匹配的map,将mapExpect从expect中去除，将flag变成true,跳出本次循环
                 if (compareMap(mapActual,mapExpect) == true){
+                    actual.remove(mapActual);
                     flag = true;
                     break;
                 }

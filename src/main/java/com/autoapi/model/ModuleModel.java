@@ -18,6 +18,8 @@ public class ModuleModel extends BaseModel{
         this.apis = apis;
     }
 
+
+
     @Override
     public String toString() {
         return "ModuleModel{" +
@@ -26,6 +28,9 @@ public class ModuleModel extends BaseModel{
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", total=" + total +
+                ", success=" + success +
+                ", fail=" + fail +
                 ", sonNumber=" + sonNumber +
                 ", sonHasRunNumber=" + sonHasRunNumber +
                 ", run=" + run +

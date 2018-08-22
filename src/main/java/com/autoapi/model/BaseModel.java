@@ -8,6 +8,10 @@ public class BaseModel {
     public Map var = new HashMap();
     public FixtureModel setup;
     public FixtureModel teardown;
+    //统计执行结果
+    public int total = 0;
+    public int success = 0;
+    public int fail = 0;
     //当前节点是否执行结束
     public int sonNumber = 0;
     public int sonHasRunNumber = 0;
@@ -78,6 +82,30 @@ public class BaseModel {
         this.run = run;
     }
 
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal() {
+        total = total + 1;
+    }
+
+    public int getSuccess() {
+        return success;
+    }
+
+    public void setSuccess() {
+        success = success + 1;
+    }
+
+    public int getFail() {
+        return fail;
+    }
+
+    public void setFail() {
+        fail = fail + 1;
+    }
+
     @Override
     public String toString() {
         return "BaseModel{" +
@@ -85,6 +113,9 @@ public class BaseModel {
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", total=" + total +
+                ", success=" + success +
+                ", fail=" + fail +
                 ", sonNumber=" + sonNumber +
                 ", sonHasRunNumber=" + sonHasRunNumber +
                 ", run=" + run +

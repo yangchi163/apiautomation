@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>report</title>
+    <script src="report.js"></script>
+    <style>
+        div{
+            white-space:normal;
+            word-break:break-all;
+            word-wrap:break-word;
+            border:1px solid white;       //增加边框
+            background:#F00;
+            color: darkseagreen;
+        }
+    </style>
+</head>
+<body>
+<div style="background-color: #0066ff">
+    <span style="text-align: center;display: block;color: aliceblue;font-size: xx-large">Test results</span>
+</div> <!-- top-banner-root -->
+<br />
+<div id = main style="display: flex;flex-direction: row; font-size: 16px;">
+    <div id="project" style="width: 400px;flex: 1;cursor: pointer;">
+        <span style="text-align: left;display: block;color: blue;font-size: x-large;background-color: coral">All Projects</span>
+        <br /><br />
+    </div>
+    <div id="module" style="width: 400px;flex: 1;cursor: pointer">
+        <span style="text-align: left;display: block;color: blue;font-size: x-large;background-color: coral">All Cases</span>
+        <br /><br />
+    </div>
+    <div id="detail" style="width: 400px;flex: 3;">
+        <span style="text-align: left;display: block;color: blue;font-size: x-large;background-color: coral">CaseDetails</span>
+        <br /><br />
+    </div>
+</div>
+
+</body>
+</html>

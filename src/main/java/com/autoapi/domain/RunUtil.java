@@ -177,6 +177,23 @@ public class RunUtil {
         }
     }
 
+    public void countResult(boolean result,CaseModel caseModel,ApiModel apiModel,ModuleModel moduleModel,ProjectModel projectModel){
+        if (result){
+            caseModel.setSuccess();
+            apiModel.setSuccess();
+            moduleModel.setSuccess();
+            projectModel.setSuccess();
+        }else {
+            caseModel.setFail();
+            apiModel.setFail();
+            moduleModel.setFail();
+            projectModel.setFail();
+        }
+        caseModel.setTotal();
+        apiModel.setTotal();
+        moduleModel.setTotal();
+        projectModel.setTotal();
+    }
 
     /**
      * 将casemodel转化成HttpClientRequest，此时变量已替换完成

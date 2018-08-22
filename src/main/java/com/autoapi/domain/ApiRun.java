@@ -173,11 +173,12 @@ public class ApiRun {
                                                         //执行断言
                                                         AssertsRun assertsRun = new AssertsRun();
                                                         assert assertsRun.runAsserts(caseModel.getAsserts(),caseModel,sqlInputStream,apiConfig,casePath);
-                                                        //执行到此处时，更改执行结果为成功
+                                                        //执行到此处时，统计执行结果
                                                         caseModel.setResult(true);
-
+                                                        runUtil.countResult(true,caseModel,apiModel,moduleModel,projectModel);
                                                     }catch (Throwable e){
                                                         caseModel.setResult(false);
+                                                        runUtil.countResult(false,caseModel,apiModel,moduleModel,projectModel);
                                                         e.printStackTrace();
                                                     }finally {
                                                         //执行teardown

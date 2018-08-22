@@ -36,6 +36,9 @@ public class ApiModel extends BaseModel{
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", total=" + total +
+                ", success=" + success +
+                ", fail=" + fail +
                 ", sonNumber=" + sonNumber +
                 ", sonHasRunNumber=" + sonHasRunNumber +
                 ", run=" + run +

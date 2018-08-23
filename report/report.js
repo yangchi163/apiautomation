@@ -20,10 +20,10 @@ window.onload = function () {
     for (let projectName in projectList){
         let project = projectList[projectName];
         if (project[run] === true) {
-            addElement(document.getElementById("project"), "div", projectName,projectName + " total:"+project[total] + " success:" + project[success],true,0);
+            addElement(document.getElementById("project"), "div", projectName,projectName + " total:"+project[total] + " success:" + project[success],true,0,true);
             //生成相应的存放模块的div
             let moduleParentId = projectName + "." + modules;
-            addElement(document.getElementById("module"),"div",moduleParentId,null  ,false,0);
+            addElement(document.getElementById("module"),"div",moduleParentId,null  ,false,0,true);
             //获取模块列表
             let moduleList = project[modules];
             //生成模块级信息
@@ -31,7 +31,12 @@ window.onload = function () {
                 let module = moduleList[moduleName];
                 if (module[run] === true) {
                     let moduleId = projectName + "." + moduleName;
-                    addElement(document.getElementById(moduleParentId), "div", moduleId,moduleId + " total:"+module[total] + " success:" + module[success],true,0);
+                    console.log(module[fail] == 0)
+                    if (module[fail] == 0) {
+                        addElement(document.getElementById(moduleParentId), "div", moduleId,moduleId + " total:"+module[total] + " fail:" + module[fail],true,0,true);
+                    } else {
+                        addElement(document.getElementById(moduleParentId), "div", moduleId,moduleId + " total:"+module[total] + " fail:" + module[fail],true,0,false);
+                    }
                     //获取api列表
                     let apiList = module[apis];
                     //生成api信息
@@ -39,8 +44,11 @@ window.onload = function () {
                         let api = apiList[apiName];
                         if (api[run] === true) {
                             let apiId = moduleName + "." + apiName;
-                            addElement(document.getElementById(moduleId), "div", apiId,apiId ,true,1);
-                            // style  text-inde
+                            if (api[fail] == 0) {
+                                addElement(document.getElementById(moduleId), "div", apiId,apiId ,true,1,true);
+                            } else {
+                                addElement(document.getElementById(moduleId), "div", apiId,apiId ,true,1,false);
+                            }
                             //获取case列表
                             let caseList = api[cases];
                             //生成case信息
@@ -48,14 +56,14 @@ window.onload = function () {
                                 let testCase = caseList[caseName];
                                 if (testCase[run] === true) {
                                     let caseId = apiName + "." + caseName;
-                                    addElement(document.getElementById(apiId), "div", caseId,caseId + "   " + testCase[result],true,2);
+                                    addElement(document.getElementById(apiId), "div", caseId,caseId + "   " + testCase[result],true,2,testCase[result]);
                                     //生成casedetail的div
                                     let detailId = caseId + ".detail";
-                                    addElement(document.getElementById("detail"),"div",detailId,detailId + "   " + testCase[result],false,0);
+                                    addElement(document.getElementById("detail"),"div",detailId,detailId + "   " + testCase[result],false,0,testCase[result]);
                                     //给detail增加更多信息
-                                    addElement(document.getElementById(detailId),"div",detailId+".request","request: " + JSON.stringify(testCase["var"]["request"]),true);
-                                    addElement(document.getElementById(detailId),"div",detailId+".response","response: " + JSON.stringify(testCase["var"]["response"]),true);
-                                    addElement(document.getElementById(detailId),"div",detailId+".result","result: " + testCase["result"],true);
+                                    addElement(document.getElementById(detailId),"div",detailId+".request","request: " + JSON.stringify(testCase["var"]["request"]),true,0,testCase[result]);
+                                    addElement(document.getElementById(detailId),"div",detailId+".response","response: " + JSON.stringify(testCase["var"]["response"]),true,0,testCase[result]);
+                                    addElement(document.getElementById(detailId),"div",detailId+".result","result: " + testCase["result"],true,0,testCase[result]);
                                     //给用例绑定点击事件
                                     document.getElementById(caseId).addEventListener("click",function () {
                                         setDisplay("detail",detailId);
@@ -84,15 +92,21 @@ window.onload = function () {
  * @param isDisplay 是否隐藏
  * @param n 缩进几个字符
  */
-function addElement(element,type,id,text,isDisplay,n) {
+function addElement(element,type,id,text,isDisplay,n,isSuccess) {
     let number = 2*n + "em";
+    let color ;
+    if (isSuccess === true){
+        color = "green";
+    }else {
+        color = "red";
+    }
     let e1 = document.createElement(type);
     e1.setAttribute("id",id);
     e1.innerText = text;
     if (isDisplay === true){
-        e1.setAttribute("style","display:block;text-indent:"+number);
+        e1.setAttribute("style","display:block;text-indent:"+number+";color:"+color);
     } else {
-        e1.setAttribute("style","display:none;text-indent:"+number);
+        e1.setAttribute("style","display:none;text-indent:"+number+";color:"+color);
     }
     element.appendChild(e1);
 }
@@ -108,9 +122,11 @@ function setDisplay(parentName,targetName) {
     for (let e = 0; e < sonNodeList.length; e++) {
         if (sonNodeList[e].nodeName == "DIV"){
             if (sonNodeList[e]["id"] == targetName){
-                sonNodeList[e].setAttribute("style","display:block");
+                // sonNodeList[e].setAttribute("style","display:block");
+                sonNodeList[e].style.display = "block";
             } else {
-                sonNodeList[e].setAttribute("style","display:none");
+                // sonNodeList[e].setAttribute("style","display:none");
+                sonNodeList[e].style.display = "none";
             }
         }
     }

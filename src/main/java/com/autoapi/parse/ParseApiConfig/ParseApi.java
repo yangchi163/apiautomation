@@ -21,22 +21,18 @@ public class ParseApi {
     private String apiPath;
     private ProjectModel apiBaseModel;
 
-    public ParseApi(String[] casePath) {
-        this(casePath[0],casePath[1],casePath[2]);
+    public ParseApi(String[] casePath,ProjectModel apiBaseModel) {
+        this(casePath[0],casePath[1],casePath[2],apiBaseModel);
     }
 
-    public ParseApi(String projectPath,String modulePath,String apiPath){
+    public ParseApi(String projectPath,String modulePath,String apiPath,ProjectModel apiBaseModel){
         this.projectPath = projectPath;
         this.modulePath = modulePath;
         this.apiPath = apiPath;
         apiModel = new ApiModel(this.apiPath);
+        this.apiBaseModel = apiBaseModel;
     }
 
-    private void setApiBaseModel() throws Exception {
-        String apiConfigPath =
-                FileKeyWords.CASEBASEPATH + File.separator + this.projectPath + File.separator + FileKeyWords.APIFILE + ".yaml";
-        apiBaseModel = new ParseBase(apiConfigPath).getApiBaseModel();
-    }
 
     public ApiModel getApiModel() throws Exception {
         String apiFilePath =
@@ -52,7 +48,6 @@ public class ParseApi {
      * @throws Exception
      */
     private void parseCase(String apiPath) throws Exception {
-        setApiBaseModel();
         Map map = YamlUtil.read(apiPath);
         //解析api级var
         if (map.containsKey(VAR)){

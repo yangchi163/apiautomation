@@ -60,8 +60,6 @@ public class CaseModel extends BaseModel{
                 ", total=" + total +
                 ", success=" + success +
                 ", fail=" + fail +
-                ", sonNumber=" + sonNumber +
-                ", sonHasRunNumber=" + sonHasRunNumber +
                 ", run=" + run +
                 '}';
     }

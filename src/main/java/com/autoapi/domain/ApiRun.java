@@ -16,11 +16,8 @@ public class ApiRun {
     //整个用例树
     public static ApiConfig apiConfig;
     private RunUtil runUtil;
-
-
-    public ApiRun() throws Exception {
+    public ApiRun(){
     }
-
 
 
     /**
@@ -184,26 +181,17 @@ public class ApiRun {
                                                         //执行teardown
                                                         FixtureModel caseTeardown = caseModel.getTeardown();
                                                         runUtil.runFixture(caseTeardown,caseModel,sqlInputStream,casePath);
-                                                        //执行完，给父节点执行计数+1
-                                                        //apiModel.setSonHasRunNumber();
                                                     }
-
                                                 }
-
                                             }
-
                                         }catch (Exception e){
                                             e.printStackTrace();
                                         } finally {
                                             //执行teardown
                                             FixtureModel apiTeardown = apiModel.getTeardown();
                                             runUtil.runFixture(apiTeardown,apiModel,sqlInputStream,apiPath);
-                                            //执行完，给父节点执行计数+1
-                                            //moduleModel.setSonHasRunNumber();
                                         }
-
                                     }
-
                                 }
                             }catch (Exception e){
                                 e.printStackTrace();
@@ -211,12 +199,8 @@ public class ApiRun {
                                 //执行tearDown
                                 FixtureModel moduleTeardown = moduleModel.getTeardown();
                                 runUtil.runFixture(moduleTeardown,moduleModel,sqlInputStream,modulePath);
-                                //执行完，给父节点执行计数+1
-                                //projectModel.setSonHasRunNumber();
                             }
-
                         }
-
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -228,7 +212,5 @@ public class ApiRun {
 
             }
         }
-
     }
-
 }

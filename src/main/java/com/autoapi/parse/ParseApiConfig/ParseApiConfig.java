@@ -15,7 +15,6 @@ import static com.autoapi.keywords.FileKeyWords.*;
  */
 public class ParseApiConfig {
     private ApiConfig apiConfig;
-
     private List<String[]> fileList;
 
     public ApiConfig getApiConfig() throws Exception {
@@ -65,7 +64,9 @@ public class ParseApiConfig {
             }
             //组装apiconfig
             if (!projects.containsKey(projectPath)){
-                projects.put(projectPath,new ProjectModel(projectPath));
+                //新建项目时，需要初始化basemodel
+                String apiFilePath = FileKeyWords.CASEBASEPATH + File.separator + projectPath + File.separator + FileKeyWords.APIFILE + ".yaml";;
+                projects.put(projectPath,new ProjectModel(projectPath,apiFilePath));
             }
             if (modulePath != null){
                 Map<String,ModuleModel> modules = projects.get(projectPath).getModules();
@@ -75,8 +76,6 @@ public class ParseApiConfig {
                 } else {
                     if (!modules.containsKey(modulePath)){
                         modules.put(modulePath, new ModuleModel(modulePath));
-                        //父节点计数+1
-                        projects.get(projectPath).setSonNumber();
                     }
                 }
             }
@@ -87,10 +86,8 @@ public class ParseApiConfig {
                     parseOtherConfig(projects.get(projectPath).getModules().get(modulePath),filePath);
                 } else {
                     if (apiPath != null && !apis.containsKey(apiPath)){
-                        ParseApi parseApi = new ParseApi(filePath);
+                        ParseApi parseApi = new ParseApi(filePath,projects.get(projectPath).getApiBaseModel());
                         apis.put(apiPath,parseApi.getApiModel());
-                        //父节点计数+1
-                        projects.get(projectPath).getModules().get(modulePath).setSonNumber();
                     }
                 }
 

@@ -60,11 +60,6 @@ public class Practice {
     @Test
     public void prac3() throws Exception {
 
-        JsonParser parser = new JsonParser();
-        String s = "hello";
-        JsonElement e = parser.parse(s);
-        System.out.println(e);
-        System.out.println(e.getClass());
     }
 
 }

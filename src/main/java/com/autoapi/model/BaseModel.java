@@ -12,9 +12,7 @@ public class BaseModel {
     public int total = 0;
     public int success = 0;
     public int fail = 0;
-    //当前节点是否执行结束
-    public int sonNumber = 0;
-    public int sonHasRunNumber = 0;
+
     //判断节点是否需要执行
     public boolean run = true;
 
@@ -48,30 +46,6 @@ public class BaseModel {
 
     public void setTeardown(FixtureModel teardown) {
         this.teardown = teardown;
-    }
-
-    public int getSonNumber() {
-        return sonNumber;
-    }
-
-    public void setSonNumber() {
-        this.sonNumber += 1;
-    }
-
-    public int getSonHasRunNumber() {
-        return sonHasRunNumber;
-    }
-
-    public void setSonHasRunNumber() {
-        this.sonHasRunNumber += 1;
-    }
-
-    public void setSonNumber(int sonNumber) {
-        this.sonNumber = sonNumber;
-    }
-
-    public void setSonHasRunNumber(int sonHasRunNumber) {
-        this.sonHasRunNumber = sonHasRunNumber;
     }
 
     public boolean isRun() {
@@ -116,8 +90,6 @@ public class BaseModel {
                 ", total=" + total +
                 ", success=" + success +
                 ", fail=" + fail +
-                ", sonNumber=" + sonNumber +
-                ", sonHasRunNumber=" + sonHasRunNumber +
                 ", run=" + run +
                 '}';
     }

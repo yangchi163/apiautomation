@@ -30,6 +30,9 @@ public class CommonUtil {
      * @return
      */
     public static Map mergeMap(Map a,Map b){
+        if (a == null){
+            return b;
+        }
         if (b != null){
             for (Object key : b.keySet()){
                 //a map中不包含key,直接添加
@@ -92,6 +95,35 @@ public class CommonUtil {
         ReadContext context = JsonPath.parse(jsonString);
         Object o = context.read(jsonpath);
         return o;
+    }
+
+    /**
+     * 如果key在target2中存在，就用target2中的
+     * 不存在就用target1中的数据
+     * 如果key对应的是map，则合并2个map后返回
+     * @param target1
+     * @param target2
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    private Object getValueFromMap(Map target1,Map target2,Object key) {
+        Object res = null;
+        if (target1 != null){
+            if (target1.containsKey(key)){
+                res = target1.get(key);
+            }
+        }
+        if (target2 != null){
+            if (target2.containsKey(key)){
+                if (target2.get(key) instanceof Map){
+                    res = CommonUtil.mergeMap((Map) res,(Map) target2.get(key));
+                }else {
+                    res = target2.get(key);
+                }
+            }
+        }
+        return res;
     }
 
 

@@ -20,6 +20,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.Assertion;
 
+import java.io.File;
 import java.net.URL;
 import java.text.Format;
 import java.util.*;

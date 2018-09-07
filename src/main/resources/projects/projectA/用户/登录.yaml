@@ -1,10 +1,10 @@
 test-case:
     正常登陆:
-        setup:
-            -
-                function:
-                    say:
-                        output: psw
-        data:
-            accountName: ${mobile}
-            password: ${psw}
+#        setup:
+#            -
+#                function:
+#                    say:
+#                        output: psw
+#        data:
+#            accountName: ${mobile}
+#            password: ${psw}

@@ -3,6 +3,9 @@ package com.autoapi.keywords;
 import java.io.File;
 
 public class FileKeyWords {
+    //文件存放目录
+    public static final String FILEBASEPATH = System.getProperty("user.dir") + File.separator +"src"
+            + File.separator + "main" + File.separator + "resources" + File.separator + "file";
     //测试数据存放目录
     public static final String CASEBASEPATH = System.getProperty("user.dir") + File.separator +"src"
             + File.separator + "main" + File.separator + "resources" + File.separator + "projects";

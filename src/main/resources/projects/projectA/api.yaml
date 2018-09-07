@@ -18,9 +18,8 @@ api:
         登录:
             method: post
             path: /mp/user/login/password
-            data:
-                accountName: "15021415241"
-                password: "123456"
+            data: demo.json
+
     moduleB:
 
         获取用户类型:

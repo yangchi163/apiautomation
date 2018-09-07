@@ -4,9 +4,11 @@ import com.autoapi.model.*;
 import com.autoapi.util.CommonUtil;
 import com.autoapi.util.YamlUtil;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import static com.autoapi.keywords.RequestKeyWords.*;
+import static com.autoapi.keywords.FileKeyWords.*;
 
 /**
  * 解析api.yaml
@@ -137,7 +139,19 @@ public class ParseBase {
         requestModel.setHeaders(CommonUtil.mergeMap(copy,headers));
         //处理body
         if (apiDetail.containsKey(BODY)){
-            Map body = (Map) apiDetail.get(BODY);
+            Map body = null;
+            //body可能是json文件名
+            Object o = apiDetail.get(BODY);
+            if (o instanceof String){
+                //只能是文件名
+                String fileName = (String) o;
+                String filePath = FILEBASEPATH + File.separator + fileName;
+                body = CommonUtil.parseJsonFile(filePath);
+            } else if (o instanceof Map){
+                body = (Map) apiDetail.get(BODY);
+            } else {
+                //不做处理
+            }
             requestModel.setBody(body);
         }
         return requestModel;

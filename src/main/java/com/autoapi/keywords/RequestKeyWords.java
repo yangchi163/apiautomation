@@ -1,6 +1,12 @@
 package com.autoapi.keywords;
 
 public class RequestKeyWords {
+    //字符集
+    public static final String UTF8 = "utf-8";
+    //传参方式
+    //public static final String JSON = "json";
+    public static final String FORM = "form";
+
     public static final String URL = "url";
     public static final String SCHEMA = "schema";
     public static final String HOST = "host";

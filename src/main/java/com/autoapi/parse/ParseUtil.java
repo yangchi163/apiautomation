@@ -7,10 +7,12 @@ import com.autoapi.parse.ParseApiConfig.ParseFixture;
 import com.autoapi.util.CommonUtil;
 import org.apache.http.util.Asserts;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.autoapi.keywords.FileKeyWords.FILEBASEPATH;
 import static com.autoapi.keywords.RequestKeyWords.*;
 
 public class ParseUtil {
@@ -44,7 +46,17 @@ public class ParseUtil {
             }
             if (caseDetail.containsKey(BODY)){
                 if (caseDetail.get(BODY) != null){
-                    bodyFromCase = (Map) caseDetail.get(BODY);
+                    Object o = caseDetail.get(BODY);
+                    if (o instanceof String){
+                        //只能是文件名
+                        String fileName = (String) o;
+                        String filePath = FILEBASEPATH + File.separator + fileName;
+                        bodyFromCase = CommonUtil.parseJsonFile(filePath);
+                    } else if (o instanceof Map){
+                        bodyFromCase = (Map) caseDetail.get(BODY);
+                    } else {
+                        //不做处理
+                    }
                 }
             }
             //设置case级var

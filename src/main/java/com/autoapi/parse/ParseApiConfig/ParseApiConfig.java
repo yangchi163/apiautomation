@@ -65,7 +65,7 @@ public class ParseApiConfig {
             //组装apiconfig
             if (!projects.containsKey(projectPath)){
                 //新建项目时，需要初始化basemodel
-                String apiFilePath = FileKeyWords.CASEBASEPATH + File.separator + projectPath + File.separator + FileKeyWords.APIFILE + ".yaml";;
+                String apiFilePath = FileKeyWords.CASEBASEPATH + File.separator + projectPath + File.separator + FileKeyWords.APIFILE + ".yaml";
                 projects.put(projectPath,new ProjectModel(projectPath,apiFilePath));
             }
             if (modulePath != null){

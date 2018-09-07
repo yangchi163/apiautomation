@@ -1,9 +1,14 @@
 package com.autoapi.util;
 
+import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+import static com.autoapi.keywords.RequestKeyWords.*;
 
 public class CommonUtil {
     /**
@@ -85,6 +90,13 @@ public class CommonUtil {
         return res;
     }
 
+    public static Map parseJsonFile(String filePath) throws IOException {
+        File file=new File(filePath);
+        String str = FileUtils.readFileToString(file,UTF8);
+        Gson gson = new Gson();
+        return gson.fromJson(str,Map.class);
+    }
+
     /**
      * 根据路径从json中返回对应值
      * @param jsonString json字符串
@@ -125,6 +137,7 @@ public class CommonUtil {
         }
         return res;
     }
+
 
 
 

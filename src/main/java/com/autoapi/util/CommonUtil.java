@@ -98,6 +98,22 @@ public class CommonUtil {
     }
 
     /**
+     * 检查拿到的值是不是变量 ${varName}
+     * @param target 要检查的值
+     * @return
+     */
+    public static boolean isVariable(Object target){
+        boolean res = false;
+        if (target instanceof String){
+            String temp = (String) target;
+            if (temp.startsWith("${") && temp.endsWith("}")){
+                res = true;
+            }
+        }
+        return res;
+    }
+
+    /**
      * 根据路径从json中返回对应值
      * @param jsonString json字符串
      * @param jsonpath json路径

@@ -244,7 +244,7 @@ public class RunUtil {
     }
 
     /**
-     *
+     *只有当值是string（${varname}）时，才会去替换,替换后的结果是object(可能是对象，基本数据)
      * @param o 需要替换的对象
      * @param varPath 当前变量的路径
      */
@@ -324,7 +324,8 @@ public class RunUtil {
      * @param varPath 当前变量所处的路径：project-module-api-case : 没有包含varname
      * @return
      */
-    private String getReplaceString(String src,String[] varPath){
+    private Object getReplaceString(String src,String[] varPath){
+        Object res = src;
         int beginIndex = 0;
         while (true){
             //s是需要替换掉的部分,s=${aaaa}
@@ -335,22 +336,31 @@ public class RunUtil {
                 String[] realVarName = {varName};
                 String[] realVarPath = CommonUtil.mergeArray(varPath,realVarName);
                 Object strForReplace = getReplaceValue(realVarPath);
-                //防止var中拿到的值是null，就不替换,不是null才替换
-                if (strForReplace != null){
-                    src = src.replace(s, (String)strForReplace);
+                //1.防止var中拿到的值是null，就不替换,不是null才替换
+                //2.var中拿到的值如果不是string,就直接给
+                if(strForReplace != null){
+                    if (strForReplace instanceof String){
+                        //是string,src有可能是/${varName1}/${varName2}/***
+                        src = src.replace(s, (String)strForReplace);
+                        res = src;
+                    }else {
+                        //不是string证明，src只是一个单独的${varName}
+                        res = strForReplace;
+                    }
                 }
                 //计算下一个需替换值的位置
                 beginIndex = src.indexOf(s) + s.length();
             } else {
                 break;
             }
+
         }
-        return src;
+        return res;
     }
 
 
     /**
-     * 获得请求数据中变量对应的值
+     * 获得请求数据中变量对应的值:包含var，以及其他部分
      * @param varPath 变量对应的路径数组 project-module-api-case-varname
      * @return
      */
@@ -364,25 +374,38 @@ public class RunUtil {
         if (varPath.length > 1){
             projectModel = this.apiConfig.getProjects().get(varPath[0]);
             if (projectModel.getVar().containsKey(varName)){
-                res = projectModel.getVar().get(varName);
+                Object temp = projectModel.getVar().get(varName);
+                if (!CommonUtil.isVariable(temp)){
+                    res = temp;
+                }
+
             }
         }
         if (varPath.length > 2){
             moduleModel = projectModel.getModules().get(varPath[1]);
             if (moduleModel.getVar().containsKey(varName)){
-                res = moduleModel.getVar().get(varName);
+                Object temp = moduleModel.getVar().get(varName);
+                if (!CommonUtil.isVariable(temp)){
+                    res = temp;
+                }
             }
         }
         if (varPath.length > 3){
             apiModel = moduleModel.getApis().get(varPath[2]);
             if (apiModel.getVar().containsKey(varName)){
-                res = apiModel.getVar().get(varName);
+                Object temp = apiModel.getVar().get(varName);
+                if (!CommonUtil.isVariable(temp)){
+                    res = temp;
+                }
             }
         }
         if (varPath.length > 4){
             caseModel = apiModel.getCases().get(varPath[3]);
             if (caseModel.getVar().containsKey(varName)){
-                res = caseModel.getVar().get(varName);
+                Object temp = caseModel.getVar().get(varName);
+                if (!CommonUtil.isVariable(temp)){
+                    res = temp;
+                }
             }
         }
         return res;

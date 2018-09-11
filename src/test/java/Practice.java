@@ -58,9 +58,6 @@ public class Practice {
         ApiRun apiRun = new ApiRun();
         apiRun.run("projectA","用户","登录");
     }
-    @Test
-    public void prac3() throws Exception {
 
-    }
 
 }

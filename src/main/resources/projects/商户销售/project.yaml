@@ -1,0 +1,12 @@
+var:
+    admin: '15021415241'
+    admin_psw: '123456'
+
+setup:
+    -
+        api:
+            商户销售.用户模块.密码登录:
+                data:
+                    accountName: ${admin}
+                    password: ${admin_psw}
+                output: login

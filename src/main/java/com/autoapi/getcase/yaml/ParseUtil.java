@@ -1,11 +1,10 @@
-package com.autoapi.parse;
+package com.autoapi.getcase.yaml;
 
+import com.autoapi.getcase.yaml.ParseApiConfig.ParseAsserts;
+import com.autoapi.getcase.yaml.ParseApiConfig.ParseFixture;
 import com.autoapi.model.*;
 import com.autoapi.model.asserts.AssertModel;
-import com.autoapi.parse.ParseApiConfig.ParseAsserts;
-import com.autoapi.parse.ParseApiConfig.ParseFixture;
 import com.autoapi.util.CommonUtil;
-import org.apache.http.util.Asserts;
 
 import java.io.File;
 import java.util.HashMap;

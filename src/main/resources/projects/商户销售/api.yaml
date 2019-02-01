@@ -1,0 +1,42 @@
+
+base:
+    url:
+        schema: http
+        host: t.jufandev.com
+        port: 8453
+        version:
+    method: POST
+    headers:
+        Content-Type: application/json;charset=UTF-8
+        ms-terminal: PC
+        type: ANDROID
+        ms-token: ${token_admin}
+
+
+api:
+    合同:
+        合同列表分页查询:
+            path: /contract/query
+            data:
+                page: 1
+                size: 30
+                dto:
+                    customer: ~
+    商户管理:
+        商户列表分页查询:
+            path: /contract/query
+            data:
+                page: 1
+                size: 30
+                dto:
+                    status: ~
+                    code: ~
+                    subMerchantName: ~
+                    subMerchantNickName: ~
+    用户模块:
+        密码登录:
+            path: /user/login/password
+            data:
+                accountName: ~
+                password: ~
+

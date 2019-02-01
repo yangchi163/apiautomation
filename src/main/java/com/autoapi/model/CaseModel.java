@@ -2,6 +2,7 @@ package com.autoapi.model;
 
 import com.autoapi.model.asserts.AssertModel;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CaseModel extends BaseModel{
@@ -12,6 +13,11 @@ public class CaseModel extends BaseModel{
 
     public CaseModel(String name) {
         this.name = name;
+    }
+
+    public CaseModel(String name,String[] path) {
+        this(name);
+        this.path = path;
     }
 
     public RequestModel getRequest() {
@@ -57,6 +63,7 @@ public class CaseModel extends BaseModel{
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", path=" + Arrays.toString(path) +
                 ", total=" + total +
                 ", success=" + success +
                 ", fail=" + fail +

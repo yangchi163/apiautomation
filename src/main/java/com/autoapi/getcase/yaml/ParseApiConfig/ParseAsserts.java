@@ -1,10 +1,10 @@
-package com.autoapi.parse.ParseApiConfig;
+package com.autoapi.getcase.yaml.ParseApiConfig;
 
 import com.autoapi.model.asserts.AssertModel;
 import com.autoapi.model.SqlModel;
 import com.autoapi.model.asserts.AssertNodeModel;
 import com.autoapi.model.asserts.ResponseModel;
-import com.autoapi.parse.ParseUtil;
+import com.autoapi.getcase.yaml.ParseUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.autoapi.parse.ParseApiConfig;
+package com.autoapi.getcase.yaml.ParseApiConfig;
 
 import com.autoapi.keywords.FileKeyWords;
 

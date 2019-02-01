@@ -1,4 +1,4 @@
-package com.autoapi.parse;
+package com.autoapi.getcase.yaml;
 
 import com.autoapi.model.*;
 import com.autoapi.util.CommonUtil;

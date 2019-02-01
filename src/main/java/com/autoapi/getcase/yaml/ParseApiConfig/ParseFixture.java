@@ -1,9 +1,9 @@
-package com.autoapi.parse.ParseApiConfig;
+package com.autoapi.getcase.yaml.ParseApiConfig;
 
 import com.autoapi.keywords.FileKeyWords;
 import com.autoapi.model.*;
-import com.autoapi.parse.ParseBase;
-import com.autoapi.parse.ParseUtil;
+import com.autoapi.getcase.yaml.ParseBase;
+import com.autoapi.getcase.yaml.ParseUtil;
 
 import java.io.File;
 import java.util.ArrayList;

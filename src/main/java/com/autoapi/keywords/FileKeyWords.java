@@ -19,4 +19,6 @@ public class FileKeyWords {
     public static final int MODULES = 2;     //模块级
     public static final int APIS = 3;     //模块级
 
+    //测试用例编写样式
+    public static final String YAML = "yaml";
 }

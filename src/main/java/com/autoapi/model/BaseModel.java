@@ -1,20 +1,27 @@
 package com.autoapi.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class BaseModel {
     public String name;
     public Map var = new HashMap();
     public FixtureModel setup;
     public FixtureModel teardown;
+    public String[] path;
     //统计执行结果
-    public int total = 0;
-    public int success = 0;
-    public int fail = 0;
-
+    public transient int total = 0;
+    public transient int success = 0;
+    public transient int fail = 0;
     //判断节点是否需要执行
-    public boolean run = true;
+    public transient boolean run = true;
+
+    public String[] getPath() {
+        return path;
+    }
+
+    public void setPath(String[] path) {
+        this.path = path;
+    }
 
     public String getName() {
         return name;
@@ -87,6 +94,7 @@ public class BaseModel {
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", path=" + Arrays.toString(path) +
                 ", total=" + total +
                 ", success=" + success +
                 ", fail=" + fail +

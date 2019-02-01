@@ -49,7 +49,7 @@ public class RunUtil {
                     runFunction((FunctionModel) fixture,baseModel,varPath);
                 }
                 if (fixture instanceof CaseModel){
-                    runApi((CaseModel) fixture,baseModel,varPath);
+                    runApi((CaseModel) fixture,baseModel,varPath,false);
                 }
             }
 
@@ -60,19 +60,21 @@ public class RunUtil {
      * 执行api
      * @param caseModel
      * @param baseModel casemodel输出的东西存放的节点
+     * @param saveRequest 是否保存request,response到var
      * @throws Exception
      */
-    public void runApi(CaseModel caseModel,BaseModel baseModel,String[] varPath) throws Exception {
+    public void runApi(CaseModel caseModel,BaseModel baseModel,String[] varPath,boolean saveRequest) throws Exception {
         //执行前替换变量
         replaceVar(caseModel,varPath);
         HttpClientRequest request = getRequest(caseModel);
         HttpClientUtil clientUtil = new HttpClientUtil();
         HttpClientResponse response = clientUtil.doRequest(request);
         if (caseModel.getOutput() != null){
+            System.out.println(response);
             baseModel.getVar().put(caseModel.getOutput(),response);
         }
         //如果是测试用例，将请求和响应保存到var中
-        if (baseModel instanceof CaseModel){
+        if (saveRequest){
             //解析response中的body
             String body = (String) response.getBody();
             JsonParser parser = new JsonParser();
@@ -80,6 +82,8 @@ public class RunUtil {
             //保存request,response
             baseModel.getVar().put(REQUEST,request);
             baseModel.getVar().put(RESPONSE,response);
+            System.out.println(request);
+            System.out.println(response);
         }
     }
 
@@ -177,6 +181,14 @@ public class RunUtil {
         }
     }
 
+    /**
+     * 更新测试执行结果
+     * @param result
+     * @param caseModel
+     * @param apiModel
+     * @param moduleModel
+     * @param projectModel
+     */
     public void countResult(boolean result,CaseModel caseModel,ApiModel apiModel,ModuleModel moduleModel,ProjectModel projectModel){
         if (result){
             caseModel.setSuccess();

@@ -1,5 +1,6 @@
 package com.autoapi.model;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,11 @@ public class ApiModel extends BaseModel{
 
     public ApiModel(String name) {
         this.name = name;
+    }
+
+    public ApiModel(String name,String[] path) {
+        this(name);
+        this.path = path;
     }
 
     public RequestModel getRequestModel() {
@@ -36,6 +42,7 @@ public class ApiModel extends BaseModel{
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", path=" + Arrays.toString(path) +
                 ", total=" + total +
                 ", success=" + success +
                 ", fail=" + fail +

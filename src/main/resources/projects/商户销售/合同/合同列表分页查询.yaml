@@ -1,0 +1,15 @@
+var:
+
+test-case:
+    管理员查询:
+        headers:
+            ms-token: ${token_guanli}
+        assert:
+            json-json:
+                status: SUCCESS
+            json-sql:
+                json: $.data.data
+                sql: 查询全部合同列表.sql
+
+
+

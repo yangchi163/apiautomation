@@ -1,9 +1,8 @@
-package com.autoapi.parse.ParseApiConfig;
+package com.autoapi.getcase.yaml.ParseApiConfig;
 
+import com.autoapi.getcase.yaml.ParseUtil;
 import com.autoapi.keywords.FileKeyWords;
 import com.autoapi.model.*;
-import com.autoapi.parse.ParseBase;
-import com.autoapi.parse.ParseUtil;
 import com.autoapi.util.YamlUtil;
 
 import java.io.File;
@@ -22,14 +21,12 @@ public class ParseApi {
     private ProjectModel apiBaseModel;
 
     public ParseApi(String[] casePath,ProjectModel apiBaseModel) {
-        this(casePath[0],casePath[1],casePath[2],apiBaseModel);
-    }
-
-    public ParseApi(String projectPath,String modulePath,String apiPath,ProjectModel apiBaseModel){
-        this.projectPath = projectPath;
-        this.modulePath = modulePath;
-        this.apiPath = apiPath;
-        apiModel = new ApiModel(this.apiPath);
+        projectPath = casePath[0];
+        modulePath = casePath[1];
+        apiPath = casePath[2];
+        //s代表的是包名
+        String[] s = {projectPath,modulePath};
+        apiModel = new ApiModel(apiPath,s);
         this.apiBaseModel = apiBaseModel;
     }
 

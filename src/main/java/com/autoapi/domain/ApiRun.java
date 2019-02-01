@@ -2,37 +2,150 @@ package com.autoapi.domain;
 
 import com.autoapi.domain.asserts.AssertsRun;
 import com.autoapi.domain.report.Report;
+import com.autoapi.getcase.CaseFactory;
 import com.autoapi.model.*;
-import com.autoapi.parse.ParseApiConfig.ParseApiConfig;
-import com.autoapi.parse.ParseApiConfig.ParseDirecotory;
 import org.apache.ibatis.io.Resources;
-
 import java.io.InputStream;
 import java.util.Map;
 
+import static com.autoapi.keywords.FileKeyWords.YAML;
+import static com.autoapi.keywords.RequestKeyWords.*;
+
 public class ApiRun {
     //mybatis文件
-    private InputStream sqlInputStream;
+    private static InputStream sqlInputStream;
     //整个用例树
     public static ApiConfig apiConfig;
-    private RunUtil runUtil;
-    public ApiRun(){
+    private static RunUtil runUtil;
+
+    static {
+        try {
+            //加载mybatis配置
+            String resource = "mybatis/mabatis-config.xml";
+            sqlInputStream = Resources.getResourceAsStream(resource);
+            //解析apiconfig
+            apiConfig = CaseFactory.getCase(YAML);
+            runUtil = new RunUtil(apiConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 单独执行用例（不触发其他方法，如setup,teardown等），function,setup,teardown,casemodel等
+     * @param functionPath 表示要执行的节点：project.module.setup
+     */
+    public static void runSingle(String functionPath) throws Exception {
+        String[] casePath = functionPath.split("\\.");
+        //判断执行的是setup,teardown，还是测试方法
+        String lastString = casePath[casePath.length -1];
+        if (SETUP.equals(lastString) || TEARDOWN.equals(lastString)){
+            String[] tempPath = new String[casePath.length - 1];
+            for (int i = 0; i<tempPath.length ;i++){
+                tempPath[i] = casePath[i];
+            }
+            BaseModel model = getModel(tempPath);
+            FixtureModel fixtureModel ;
+            if (SETUP.equals(lastString)){
+                fixtureModel = model.getSetup();
+            }else {
+                fixtureModel = model.getTeardown();
+            }
+            //执行变量替换
+            runUtil.replaceVar(model.getVar(),tempPath);
+            //执行setup
+            runUtil.runFixture(fixtureModel,model,sqlInputStream,tempPath);
+
+        }else {
+            CaseModel caseModel = (CaseModel) getModel(casePath);
+            //执行变量替换
+            runUtil.replaceVar(caseModel.getVar(),casePath);
+            //执行setup
+            FixtureModel caseSetup = caseModel.getSetup();
+            runUtil.runFixture(caseSetup,caseModel,sqlInputStream,casePath);
+            //执行请求
+            //此处后一个basemodel不起作用
+            runUtil.runApi(caseModel,caseModel,casePath,true);
+
+            //执行断言
+            AssertsRun assertsRun = new AssertsRun();
+            assert assertsRun.runAsserts(caseModel.getAsserts(),caseModel,sqlInputStream,apiConfig,casePath);
+        }
+    }
+
+    /**
+     *
+     * @param casePath 路径 [project,module,api,case]
+     * @return
+     */
+    private static BaseModel getModel(String[] casePath){
+        String projectName;
+        String moduleName;
+        String apiName;
+        String caseName;
+        BaseModel result = null;
+        ProjectModel projectModel = null;
+        ModuleModel moduleModel = null;
+        ApiModel apiModel = null;
+        CaseModel caseModel = null;
+        if (casePath.length > 0){
+            projectName = casePath[0];
+            Map<String,ProjectModel> projectModelMap = apiConfig.getProjects();
+            for (Object key : projectModelMap.keySet()){
+                if (key.equals(projectName)){
+                    projectModel = projectModelMap.get(key);
+                    result = projectModel;
+                }
+            }
+
+        }
+        if (casePath.length > 1){
+            moduleName = casePath[1];
+            Map<String,ModuleModel> moduleModelMap = projectModel.getModules();
+            for (Object key : moduleModelMap.keySet()){
+                if (key.equals(moduleName)){
+                    moduleModel = moduleModelMap.get(key);
+                    result = moduleModel;
+                }
+            }
+
+        }
+        if (casePath.length > 2){
+            apiName = casePath[2];
+            Map<String,ApiModel> apiModelMap = moduleModel.getApis();
+            for (Object key : apiModelMap.keySet()){
+                if (key.equals(apiName)){
+                    apiModel = apiModelMap.get(key);
+                    result = apiModel;
+                }
+            }
+        }
+        if (casePath.length > 3){
+            caseName = casePath[3];
+            Map<String,CaseModel> caseModelMap = apiModel.getCases();
+            for (Object key : caseModelMap.keySet()){
+                if (key.equals(caseName)){
+                    caseModel = caseModelMap.get(key);
+                    result = caseModel;
+                }
+            }
+        }
+        return result;
     }
 
 
     /**
-     * 执行标记后的用例
+     * 执行标记后的用例,弃用
      * @param casePath 用例路径，可变参数
      * @throws Exception
      */
-    public void run(String... casePath) throws Exception {
+    private static void run(String... casePath) throws Exception {
         //加载mybatis配置
         String resource = "mybatis/mabatis-config.xml";
         sqlInputStream = Resources.getResourceAsStream(resource);
         //解析apiconfig
-        ParseDirecotory parseDirecotory = new ParseDirecotory();
-        ParseApiConfig parseApiConfig = new ParseApiConfig(parseDirecotory.getCasePath());
-        this.apiConfig = parseApiConfig.getApiConfig();
+        CaseFactory caseFactory = new CaseFactory();
+        apiConfig = caseFactory.getCase(YAML);
         runUtil = new RunUtil(apiConfig);
         //标记要执行的用例
         collectCase(casePath);
@@ -40,7 +153,7 @@ public class ApiRun {
         doRun();
         //生成测试报告的数据
         Report report = new Report();
-        report.saveReport(this.apiConfig);
+        report.saveReport(apiConfig);
     }
 
     /**
@@ -48,7 +161,7 @@ public class ApiRun {
      * @param casePath 用例路径，可变参数
      * @throws Exception
      */
-    private void collectCase(String... casePath) throws Exception {
+    private static void collectCase(String... casePath) throws Exception {
         String projectName;
         String moduleName;
         String apiName;
@@ -58,7 +171,7 @@ public class ApiRun {
         ApiModel apiModel = null;
         if (casePath.length > 0){
             projectName = casePath[0];
-            Map<String,ProjectModel> projectModelMap = this.apiConfig.getProjects();
+            Map<String,ProjectModel> projectModelMap = apiConfig.getProjects();
             for (Object key : projectModelMap.keySet()){
                 if (key.equals(projectName)){
                     projectModel = projectModelMap.get(key);
@@ -105,12 +218,14 @@ public class ApiRun {
 
     }
 
+
+
     /**
      *真正执行用例的方法,由run()调用
      * @throws Exception
      */
-    private void doRun() throws Exception {
-        Map<String,ProjectModel> projectModelMap = this.apiConfig.getProjects();
+    private static void doRun() throws Exception {
+        Map<String,ProjectModel> projectModelMap = apiConfig.getProjects();
 
         //project层
         for (Object keyProject : projectModelMap.keySet()){
@@ -165,7 +280,7 @@ public class ApiRun {
                                                         runUtil.runFixture(caseSetup,caseModel,sqlInputStream,casePath);
                                                         //执行请求
                                                         //此处后一个basemodel不起作用
-                                                        runUtil.runApi(caseModel,caseModel,casePath);
+                                                        runUtil.runApi(caseModel,caseModel,casePath,true);
 
                                                         //执行断言
                                                         AssertsRun assertsRun = new AssertsRun();

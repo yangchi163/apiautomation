@@ -5,8 +5,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
 import static com.autoapi.keywords.RequestKeyWords.*;
 
@@ -154,7 +153,40 @@ public class CommonUtil {
         return res;
     }
 
+    public static void writeToFile(String fileName,String data) {
+        BufferedWriter writer = null;
+        File file = new File(fileName);
+        //如果文件不存在，则新建一个
+        if(!file.exists()){
+            try {
+                //创建父目录
+                if (!file.getParentFile().exists()){
+                    file.getParentFile().mkdirs();
+                }
+                //创建文件
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //写入
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false), "UTF-8"));
+            writer.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if(writer != null){
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("文件写入成功！");
 
+    }
 
 
 }

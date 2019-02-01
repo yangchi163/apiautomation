@@ -1,9 +1,9 @@
 package com.autoapi.model;
 
-import com.autoapi.parse.ParseBase;
+import com.autoapi.getcase.yaml.ParseBase;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProjectModel extends BaseModel{
@@ -23,6 +23,11 @@ public class ProjectModel extends BaseModel{
     public ProjectModel(String name,String apiFilePath) throws Exception {
         this.name = name;
         apiBaseModel = new ParseBase(apiFilePath).getApiBaseModel();
+    }
+
+    public ProjectModel(String name,String apiFilePath,String[] path) throws Exception {
+        this(name,apiFilePath);
+        this.path = path;
     }
 
     public ProjectModel getApiBaseModel() {
@@ -46,6 +51,7 @@ public class ProjectModel extends BaseModel{
                 ", var=" + var +
                 ", setup=" + setup +
                 ", teardown=" + teardown +
+                ", path=" + Arrays.toString(path) +
                 ", total=" + total +
                 ", success=" + success +
                 ", fail=" + fail +

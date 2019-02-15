@@ -34,6 +34,9 @@ public class AssertsRun {
         for (AssertModel assertModel:assertModels){
             Object actual = getAssertNodeResult(assertModel.getActual(),baseModel,inputStream,apiConfig,varpath);
             Object expect = getAssertNodeResult(assertModel.getExpect(),baseModel,inputStream,apiConfig,varpath);
+            //将actual,expect保存到config中，方便定位问题
+            assertModel.setActualObj(actual);
+            assertModel.setExpectObj(expect);
             if(compare(actual,expect) == false){
                 return false;
             }

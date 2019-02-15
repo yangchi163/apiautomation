@@ -1,6 +1,8 @@
 package com.autoapi.model;
 
 import com.autoapi.model.asserts.AssertModel;
+import com.autoapi.model.http.HttpClientRequest;
+import com.autoapi.model.http.HttpClientResponse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +12,8 @@ public class CaseModel extends BaseModel{
     private boolean result;
     private String output;
     private List<AssertModel> asserts;
+    private HttpClientRequest httpClientRequest;
+    private HttpClientResponse httpClientResponse;
 
     public CaseModel(String name) {
         this.name = name;
@@ -18,6 +22,22 @@ public class CaseModel extends BaseModel{
     public CaseModel(String name,String[] path) {
         this(name);
         this.path = path;
+    }
+
+    public HttpClientRequest getHttpClientRequest() {
+        return httpClientRequest;
+    }
+
+    public void setHttpClientRequest(HttpClientRequest httpClientRequest) {
+        this.httpClientRequest = httpClientRequest;
+    }
+
+    public HttpClientResponse getHttpClientResponse() {
+        return httpClientResponse;
+    }
+
+    public void setHttpClientResponse(HttpClientResponse httpClientResponse) {
+        this.httpClientResponse = httpClientResponse;
     }
 
     public RequestModel getRequest() {

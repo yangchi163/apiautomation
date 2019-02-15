@@ -1,4 +1,4 @@
-package com.autoapi.genetator.element;
+package com.autoapi.genetator.javaelement;
 
 public class DataType {
     public static final String STRING = "String";

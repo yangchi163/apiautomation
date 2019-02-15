@@ -1,4 +1,4 @@
-package com.autoapi.genetator.element;
+package com.autoapi.genetator.javaelement;
 
 import java.util.ArrayList;
 import java.util.List;

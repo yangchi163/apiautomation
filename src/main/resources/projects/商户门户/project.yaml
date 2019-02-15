@@ -2,11 +2,16 @@ var:
     admin: '15021415241'
     admin_psw: '123456'
 
+    #中间变量
+    token_admin: ${login}.headers.merchant-portal-token
+
+
 setup:
     -
         api:
-            商户销售.用户模块.密码登录:
+            商户门户.用户.密码登录:
                 data:
                     accountName: ${admin}
                     password: ${admin_psw}
                 output: login
+

@@ -1,9 +1,9 @@
 package com.autoapi.genetator;
 
-import com.autoapi.genetator.element.AnnotationField;
-import com.autoapi.genetator.element.ElementAnnotation;
-import com.autoapi.genetator.element.ElementField;
-import com.autoapi.genetator.element.ElementMethod;
+import com.autoapi.genetator.javaelement.AnnotationField;
+import com.autoapi.genetator.javaelement.ElementAnnotation;
+import com.autoapi.genetator.javaelement.ElementField;
+import com.autoapi.genetator.javaelement.ElementMethod;
 
 import java.io.File;
 import java.util.ArrayList;

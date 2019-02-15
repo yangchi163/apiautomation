@@ -126,22 +126,24 @@ public class ParseUtil {
             String sqlNames = (String) sqlName;
             sqlModel.setSqlName(sqlNames);
             Map sqlDetailFromConfig = (Map) sqlMapFromConfig.get(sqlName);
-            //设置conn
-            if (sqlDetailFromConfig.containsKey(CONN)) {
-                if (sqlDetailFromConfig.get(CONN) != null){
-                    sqlModel.setConn((String) sqlDetailFromConfig.get(CONN));
+            if (sqlDetailFromConfig != null){
+                //设置conn
+                if (sqlDetailFromConfig.containsKey(CONN)) {
+                    if (sqlDetailFromConfig.get(CONN) != null){
+                        sqlModel.setConn((String) sqlDetailFromConfig.get(CONN));
+                    }
                 }
-            }
-            //设置params
-            if (sqlDetailFromConfig.containsKey(PARAMS)) {
-                if (sqlDetailFromConfig.get(PARAMS) != null){
-                    sqlModel.setParams((Map) sqlDetailFromConfig.get(PARAMS));
+                //设置params
+                if (sqlDetailFromConfig.containsKey(PARAMS)) {
+                    if (sqlDetailFromConfig.get(PARAMS) != null){
+                        sqlModel.setParams((Map) sqlDetailFromConfig.get(PARAMS));
+                    }
                 }
-            }
-            //设置output
-            if (sqlDetailFromConfig.containsKey(OUTPUT)) {
-                if (sqlDetailFromConfig.get(OUTPUT) != null){
-                    sqlModel.setOutput((String) sqlDetailFromConfig.get(OUTPUT));
+                //设置output
+                if (sqlDetailFromConfig.containsKey(OUTPUT)) {
+                    if (sqlDetailFromConfig.get(OUTPUT) != null){
+                        sqlModel.setOutput((String) sqlDetailFromConfig.get(OUTPUT));
+                    }
                 }
             }
         }

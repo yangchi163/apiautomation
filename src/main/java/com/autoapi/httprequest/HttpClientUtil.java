@@ -114,10 +114,8 @@ public class HttpClientUtil {
         Map body = request.getBody();
         HttpEntity entity ;
         if (postType.equals(JSON)){
-            System.out.println(1);
             entity = new StringEntity(gson.toJson(body),UTF8);
         } else {
-            System.out.println(2);
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             for (Object key : body.keySet()){
                 params.add(new BasicNameValuePair((String) key, (String) body.get(key)));

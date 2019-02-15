@@ -5,6 +5,7 @@ import com.autoapi.model.*;
 import com.autoapi.model.http.HttpClientRequest;
 import com.autoapi.model.http.HttpClientResponse;
 import com.autoapi.util.CommonUtil;
+import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import keywords.DoFunction;
 import keywords.DoSql;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static com.autoapi.keywords.RequestKeyWords.*;
+import static com.autoapi.util.CommonUtil.*;
 public class RunUtil {
     private ApiConfig apiConfig;
 
@@ -70,7 +72,6 @@ public class RunUtil {
         HttpClientUtil clientUtil = new HttpClientUtil();
         HttpClientResponse response = clientUtil.doRequest(request);
         if (caseModel.getOutput() != null){
-            System.out.println(response);
             baseModel.getVar().put(caseModel.getOutput(),response);
         }
         //如果是测试用例，将请求和响应保存到var中
@@ -79,11 +80,13 @@ public class RunUtil {
             String body = (String) response.getBody();
             JsonParser parser = new JsonParser();
             response.setBody(parser.parse(body));
-            //保存request,response
+            //保存request,response（供使用）
             baseModel.getVar().put(REQUEST,request);
             baseModel.getVar().put(RESPONSE,response);
-            System.out.println(request);
-            System.out.println(response);
+            //将request,response保存到config,方便出错了检查问题
+            caseModel.setHttpClientRequest(request);
+            caseModel.setHttpClientResponse(response);
+
         }
     }
 
@@ -116,14 +119,27 @@ public class RunUtil {
         try {
             DoSql mapper = session.getMapper(DoSql.class);
             Class clazz = mapper.getClass();
-            //获取执行方法
-            Method m = clazz.getMethod(sqlName,Map.class);
-            //判断方法是否有返回值,执行方法，并将返回结果赋值给result
-            if (m.getReturnType().getName().equals("void")){
-                m.invoke(mapper,params);
+            //获取执行方法,可能没有参数
+            Method m;
+            if (params != null){
+                m = clazz.getMethod(sqlName,Map.class);
+                //判断方法是否有返回值,执行方法，并将返回结果赋值给result
+                if (m.getReturnType().getName().equals("void")){
+                    m.invoke(mapper,params);
+                }else {
+                    result = m.invoke(mapper,params);
+                }
             }else {
-                result = m.invoke(mapper,params);
+                m = clazz.getMethod(sqlName);
+                //判断方法是否有返回值,执行方法，并将返回结果赋值给result
+                if (m.getReturnType().getName().equals("void")){
+                    m.invoke(mapper);
+                }else {
+                    result = m.invoke(mapper);
+                }
             }
+
+
             //判断是否需要将result放到变量中
             if (output != null){
                 baseModel.getVar().put(output,result);
@@ -166,7 +182,7 @@ public class RunUtil {
         Class clazz = doFunction.getClass();
         Method[] methods = clazz.getMethods();
         for (Method method : methods){
-            //找到对应的方法
+            //找到对应的方法,反射调用传入数组，相当于调用可变参数方法
             if (functionName.equals(method.getName())){
                 if (method.getReturnType().getName().equals("void")){
                     method.invoke(doFunction,param);
@@ -242,7 +258,7 @@ public class RunUtil {
                 .setPath(path);
         //组装params
         Map params = urlModel.getParams();
-        if (params != null){
+        if (params != null && params.size() > 0){
             List<NameValuePair> pairList = new ArrayList<NameValuePair>();
             for (Object k : params.keySet()){
                 NameValuePair pair = new BasicNameValuePair((String) k,(String) params.get(k));
@@ -356,8 +372,16 @@ public class RunUtil {
                         src = src.replace(s, (String)strForReplace);
                         res = src;
                     }else {
-                        //不是string证明，src只是一个单独的${varName}
-                        res = strForReplace;
+                        //strForReplace不是string证明:src只是一个单独的${varName}
+                        //判断是否需要从对象中取值
+                        if(CommonUtil.isJsonVariable(src)){
+                            String jsonpath = src.replace(CommonUtil.getFirstString(src,0),"$");
+                            Gson gson = new Gson();
+                            String jsonString = gson.toJson(strForReplace);
+                            res = CommonUtil.getFromJsonByjsonPath(jsonString,jsonpath);
+                        }else {
+                            res = strForReplace;
+                        }
                     }
                 }
                 //计算下一个需替换值的位置

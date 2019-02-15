@@ -1,4 +1,4 @@
-package com.autoapi.genetator.element;
+package com.autoapi.genetator.javaelement;
 
 public class ElementPermission {
     public static final String PRIVATE = "private";

@@ -1,7 +1,7 @@
 package keywords;
 
-import java.util.Map;
+import java.util.List;
 
 public interface DoSql {
-    String selectMobile(Map map);
+    List selectPotential();
 }

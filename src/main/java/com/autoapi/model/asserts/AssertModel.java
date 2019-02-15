@@ -1,10 +1,30 @@
 package com.autoapi.model.asserts;
 
 public class AssertModel {
-    //预期结果json：map;response:responsemodel;sql:sqlmodel
+    //预期结果表达式json：map;response:responsemodel;sql:sqlmodel
     private AssertNodeModel expect;
-    //实际结果
+    //实际结果表达式
     private AssertNodeModel actual;
+    //预期结果
+    private Object expectObj;
+    //实际结果
+    private Object actualObj;
+
+    public Object getExpectObj() {
+        return expectObj;
+    }
+
+    public void setExpectObj(Object expectObj) {
+        this.expectObj = expectObj;
+    }
+
+    public Object getActualObj() {
+        return actualObj;
+    }
+
+    public void setActualObj(Object actualObj) {
+        this.actualObj = actualObj;
+    }
 
     public AssertNodeModel getExpect() {
         return expect;
@@ -27,6 +47,8 @@ public class AssertModel {
         return "AssertModel{" +
                 "expect=" + expect +
                 ", actual=" + actual +
+                ", expectObj=" + expectObj +
+                ", actualObj=" + actualObj +
                 '}';
     }
 }

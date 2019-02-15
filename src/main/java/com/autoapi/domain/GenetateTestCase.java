@@ -1,7 +1,7 @@
 package com.autoapi.domain;
 
 import com.autoapi.genetator.CodeGenerator;
-import com.autoapi.genetator.element.*;
+import com.autoapi.genetator.javaelement.*;
 import com.autoapi.getcase.CaseFactory;
 import com.autoapi.model.*;
 

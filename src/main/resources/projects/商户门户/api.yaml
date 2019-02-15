@@ -1,0 +1,32 @@
+
+base:
+    url:
+        schema: http
+        host: t.jufandev.com
+        port: 33084
+        version:
+    method: POST
+    headers:
+        Content-Type: application/json;charset=UTF-8
+        terminal: PC
+        type: ANDROID
+        merchant-portal-token: ${token_admin}
+        pushId: 1545es
+
+
+api:
+    用户:
+        密码登录:
+            path: /mp/user/login/password
+            data:
+                accountName: ~
+                password: ~
+
+    意向客户:
+        意向客户分页查询:
+            path: /mp/potential/client/page
+            data:
+                page: ~
+                size: ~
+                dto:
+                    name: ~

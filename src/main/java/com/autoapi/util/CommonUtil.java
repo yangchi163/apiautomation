@@ -56,6 +56,22 @@ public class CommonUtil {
     }
 
     /**
+     * 检查拿到的值是不是变量 ${varName}
+     * @param target 要检查的值
+     * @return
+     */
+    public static boolean isVariable(Object target){
+        boolean res = false;
+        if (target instanceof String){
+            String temp = (String) target;
+            if (temp.startsWith("${") && temp.endsWith("}")){
+                res = true;
+            }
+        }
+        return res;
+    }
+
+    /**
      * 短期内能满足需求，后期再优化
      * 注：${${}}不可以如此嵌套使用
      * 返回匹配到的第一个${}
@@ -69,6 +85,21 @@ public class CommonUtil {
             return null;
         }
         return s.substring(start,end+1);
+    }
+
+    /**
+     * 判断字符串是否是${varname}.path的格式，是就对变量执行jsonpath取值
+     * @param s
+     * @return
+     */
+    public static boolean isJsonVariable(String s){
+        if (!s.startsWith("${")){
+            return false;
+        }
+        if (s.indexOf("}.") == -1){
+            return false;
+        }
+        return true;
     }
 
 
@@ -96,21 +127,6 @@ public class CommonUtil {
         return gson.fromJson(str,Map.class);
     }
 
-    /**
-     * 检查拿到的值是不是变量 ${varName}
-     * @param target 要检查的值
-     * @return
-     */
-    public static boolean isVariable(Object target){
-        boolean res = false;
-        if (target instanceof String){
-            String temp = (String) target;
-            if (temp.startsWith("${") && temp.endsWith("}")){
-                res = true;
-            }
-        }
-        return res;
-    }
 
     /**
      * 根据路径从json中返回对应值

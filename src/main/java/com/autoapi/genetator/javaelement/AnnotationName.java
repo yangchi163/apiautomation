@@ -1,4 +1,4 @@
-package com.autoapi.genetator.element;
+package com.autoapi.genetator.javaelement;
 
 public class AnnotationName {
     public static final String BEFORESUITE = "BeforeSuite";

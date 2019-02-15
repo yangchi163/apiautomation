@@ -55,6 +55,8 @@ public class ApiRun {
             runUtil.replaceVar(model.getVar(),tempPath);
             //执行setup
             runUtil.runFixture(fixtureModel,model,sqlInputStream,tempPath);
+            //执行变量替换
+            runUtil.replaceVar(model.getVar(),tempPath);
 
         }else {
             CaseModel caseModel = (CaseModel) getModel(casePath);
@@ -66,6 +68,9 @@ public class ApiRun {
             //执行请求
             //此处后一个basemodel不起作用
             runUtil.runApi(caseModel,caseModel,casePath,true);
+            //执行teardown
+            FixtureModel caseTearDown = caseModel.getTeardown();
+            runUtil.runFixture(caseTearDown,caseModel,sqlInputStream,casePath);
 
             //执行断言
             AssertsRun assertsRun = new AssertsRun();

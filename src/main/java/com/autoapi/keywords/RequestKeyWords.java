@@ -24,7 +24,7 @@ public class RequestKeyWords {
     //断言模块
     public static final String ASSERTS = "asserts";
     public static final String JSON = "json";
-    public static final String EXPECT = "expexct";
+    public static final String EXPECT = "expect";
     public static final String ACTUAL = "actual";
     //fixture模块key
     public static final String SETUP = "setup";

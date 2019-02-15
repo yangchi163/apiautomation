@@ -1,0 +1,19 @@
+
+
+test-case:
+    查询:
+        data:
+            page: 1
+            size: 10
+        asserts:
+            -
+                expect:
+                    sql:
+                        selectPotential: ~
+                actual:
+                    response: $.body.data.data
+#            -
+#                expect:
+#                    status: SUCCESS
+#                actual:
+#                    response: $.body

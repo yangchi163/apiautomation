@@ -24,13 +24,14 @@
 #      teardown:
 #      asserts:
 #         -
-#             expexct:
+#             expect:
 #                  json:
 #                  response:
 #                  sql:
 #             actual:
 #                 json:
-#                 response:
+#                 #代表从response中获取结果
+#                 response: $.body
 #                 sql:
 #         -
 #             expexct:
